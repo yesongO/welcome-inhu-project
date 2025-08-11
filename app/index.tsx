@@ -28,10 +28,10 @@ export default function IntroScreen() {
         <ImageBackground source={require("../assets/images/forest_background1.png")} style={styles.background}>
             <View style={styles.overlay}>
                 <Image source={require("../assets/images/inha_logo.png")} style={styles.logo} />
-                <Text style={styles.title}>놀러와요 인후의 숲</Text>
-                <Text style={styles.subtitle}>방학미션 시작! 인후를 구해라!</Text>
-                <TextInput style={styles.input} placeholder="학번" value={studentId} onChangeText={setStudentId} />
-                <TextInput style={styles.input} placeholder="비번" value={password} onChangeText={setPassword} />
+                <Image source={require("../assets/images/title.png")} style={styles.titleImage} />
+                <Text style={[styles.subtitle, styles.subtitleStroke]}>방학미션 시작! 인후를 구해라!</Text>
+                <TextInput style={styles.input} placeholder="학번" placeholderTextColor="#7F7F7F" value={studentId} onChangeText={setStudentId} />
+                <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#7F7F7F" value={password} onChangeText={setPassword} />
                 <View style={styles.buttonRow}>
                     <TouchableOpacity style={styles.button} onPress={handleLogin}>
                         <Text style={styles.buttonText}>입장하기</Text>
@@ -57,24 +57,34 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     logo: {
-        width: 120,
-        height: 120,
-        marginBottom: 20,
+        width: 100,
+        height: 100,
+        marginBottom: -112,
+        marginTop: -80,
     },
-    title: {
-        fontSize: 22,
-        fontFamily: "kirang",
-        fontWeight: "bold",
-        marginBottom: 5,
+    titleImage: {
+        width: 300,
+        height: 300,
+        resizeMode: "contain",
+        marginBottom: -114,
     },
     subtitle: {
-        fontSize: 16,
-        color: "#555",
+        fontSize: 26,
+        fontFamily: "kirang",
+        color: "#ffffff",
         marginBottom: 20,
     },
+    subtitleStroke: {
+        textShadowColor: "#D2D2D2",
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10,
+    },
     input: {
+        fontFamily: "supermagic",
+        fontSize: 16,
+        color: "#000000",
         width: "100%",
-        height: 45,
+        height: 40,
         borderWidth: 1,
         borderColor: "#ccc",
         borderRadius: 8,
@@ -85,19 +95,23 @@ const styles = StyleSheet.create({
     buttonRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        width: "100%",
-        marginTop: 10,
+        width: "70%",
+        marginTop: 24,
+        gap: 16,
     },
     button: {
         flex: 1,
-        backgroundColor: "#4A90E2",
-        paddingVertical: 12,
+        backgroundColor: "#567778",
+        paddingVertical: 6,
         borderRadius: 8,
-        marginHorizontal: 5,
+        marginHorizontal: 2,
+        borderWidth: 2,
+        borderColor: "#FFFFFF",
     },
     buttonText: {
         color: "#fff",
-        fontSize: 16,
+        fontFamily: "supermagic",
+        fontSize: 22,
         textAlign: "center",
         fontWeight: "bold",
     },
