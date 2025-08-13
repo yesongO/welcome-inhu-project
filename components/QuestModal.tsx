@@ -65,7 +65,7 @@ export default function QuestModal({
                 onAccept(quest);
                 onClose();
             }}>
-                <Text style={{ color: "#fff", fontWeight: "bold" }}>수락하기</Text>
+                <Text style={ styles.acceptBtnText }>수락하기</Text>
             </TouchableOpacity>
         </ImageBackground>
         </View>
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         alignItems: "center", 
         marginTop: 70,
         marginRight: 160,
-        marginBottom: 40,
+        marginBottom: 10,
         zIndex: 1000,
     },
     characterImage: { 
@@ -123,12 +123,44 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     description: { 
-        fontSize: 14, 
-        marginVertical: 10 },
+        fontSize: 14,
+        fontFamily: "pixel",
+        color: "#5D3838",
+        marginVertical: 20,
+        lineHeight: 18,
+        marginHorizontal: 10,
+        marginRight: 20,
+        marginLeft: 20,
+    },
     acceptBtn: { 
-        backgroundColor: "#4CAF50", 
-        padding: 10, 
-        borderRadius: 8, 
+        backgroundColor: "#6A4546",
+        width: 130,
+        paddingVertical: 10,
+        paddingHorizontal: 24,
+        borderRadius: 50,
+        marginTop: 20,
+        marginLeft: 78,
+        borderWidth: 3,
+        borderColor: "#FFFFFF", 
         alignItems: "center" 
-    }
+    },
+    acceptBtnText: {
+        color: "#fff",
+        fontFamily: "pixel",
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
 });
+
+// button: {
+//     width: 140,
+//     alignSelf: "center",
+//     backgroundColor: "#6A4546",
+//     paddingVertical: 12,
+//     paddingHorizontal: 40,
+//     borderRadius: 50,
+//     marginTop: 20,
+//     borderWidth: 3,
+//     borderColor: "#FFFFFF",
+// },

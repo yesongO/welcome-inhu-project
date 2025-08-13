@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Animated, Image, ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
 import QuestModal from "../../components/QuestModal";
+import TopBar from "../../components/TopBar";
 
 type Quest = {
     title: string;
@@ -12,6 +13,7 @@ type Quest = {
 
 export default function MainScreen() {
     const router = useRouter();
+    const userPoints = 100; // 나중에 API로 가져올 나의 포인트
 
 
     // 전구 반짝이는 애니메이션 관련
@@ -85,6 +87,8 @@ export default function MainScreen() {
         <>
         <ImageBackground source={require("../../assets/images/forest_background2.png")} style={styles.background}>
             <View style={styles.overlay}></View>
+
+            <TopBar points={userPoints} />
 
             {/* 왼쪽 상단 캐릭터 */}
             <TouchableOpacity
