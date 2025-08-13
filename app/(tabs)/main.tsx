@@ -46,21 +46,21 @@ export default function MainScreen() {
     // 퀘스트 예시 데이터
     const quests = [
             {
-                title: "퀘스트 1",
+                title: "식당이름",
                 reward: 100,
-                description: "퀘스트 1 설명",
+                description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
                 characterImage: require("../../assets/images/excharacter_1.png"),
             },
             {
-                title: "퀘스트 2",
-                reward: 200,
-                description: "퀘스트 2 설명",
+                title: "식당이름",
+                reward: 100,
+                description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
                 characterImage: require("../../assets/images/excharacter_2.png"),
             }, 
             {
-                title: "퀘스트 3",
-                reward: 300,
-                description: "퀘스트 3 설명",
+                title: "식당이름",
+                reward: 100,
+                description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
                 characterImage: require("../../assets/images/excharacter_3.png"),
             },
     ];

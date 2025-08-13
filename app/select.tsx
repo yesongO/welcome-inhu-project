@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { useFonts } from "expo-font";
-import { customFonts } from "../constants/Fonts";
-import { View, Text, TextInput, Button, Image, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { customFonts } from "../constants/Fonts";
 
 export default function SelectScreen() {
     const router = useRouter();
@@ -51,7 +51,7 @@ export default function SelectScreen() {
                         onPress={() => handleGenderSelect("female")}
                     >
                         <Image
-                            source={require("../assets/images/women.png")}
+                            source={require("../assets/images/woman.png")}
                             style={styles.genderImage}
                             resizeMode="contain"
                         />
