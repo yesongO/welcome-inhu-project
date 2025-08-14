@@ -1,6 +1,7 @@
 // (tabs)/mypage.tsx
 import { useRouter } from "expo-router";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Svg, { Text as SvgText } from "react-native-svg";
 
 export default function MyPageScreen() {
     const router = useRouter();
@@ -32,30 +33,81 @@ export default function MyPageScreen() {
             </View>
 
                 {/* 오른쪽 상단 선물 상점 */}
-                <TouchableOpacity style={[styles.iconButton, { top: "30%", right: "12%" }]} onPress={() => router.push("/giftshop")}>
+                <TouchableOpacity style={[styles.iconButton, { top: "38%", right: "12%" }]} onPress={() => router.push("/giftshop")}>
                     <Image source={require("../../assets/images/intro_gift.png")} style={styles.iconImage} />
-                    <Text style={[styles.iconText, { color: "#EF6868" }]}>선물 상점</Text>
+                    <Svg height="80" width="120">
+                        <SvgText
+                            x="0"
+                            y="26"
+                            fontSize="30"
+                            fontFamily="cookieB"
+                            stroke="#fff"       // 테두리 색
+                            strokeWidth="4"     // 테두리 굵기
+                        >
+                            선물 상점
+                        </SvgText>
+                        <SvgText
+                            x="0"
+                            y="26"
+                            fontSize="30"
+                            fontFamily="cookieB"
+                            fill="#EF6868"      // 안쪽 글자 색
+                        >
+                            선물 상점
+                        </SvgText>
+                    </Svg>
                 </TouchableOpacity>
 
-                {/* <Svg height="40" width="200">
-                <SvgText x="3" y="30" fontSize="20" fontFamily="cookieB" stroke="#30211A" strokeWidth="8">
-                    보유 포인트: {points}P
-                </SvgText>
-                <SvgText x="3" y="30" fontSize="20" fontFamily="cookieB" fill="#fff">
-                    보유 포인트: {points}P
-                </SvgText>
-                </Svg> */}
-
-                {/* 왼쪽 중단 식당 도감 */}
-                <TouchableOpacity style={[styles.iconButton, { top: "45%", left: "10%" }]} onPress={() => router.push("/restaurantdex")}>
+                {/* 왼쪽 중단 식당 도감 1D96CE */}
+                <TouchableOpacity style={[styles.iconButton, { top: "50%", left: "10%" }]} onPress={() => router.push("/restaurantdex")}>
                     <Image source={require("../../assets/images/intro_dex.png")} style={styles.iconImage} />
-                    <Text style={[styles.iconText, { color: "#1D96CE" }]}>식당 도감</Text>
+                    <Svg height="80" width="120">
+                        <SvgText
+                            x="0"
+                            y="26"
+                            fontSize="30"
+                            fontFamily="cookieB"
+                            stroke="#fff"       // 테두리 색
+                            strokeWidth="4"     // 테두리 굵기
+                        >
+                            식당 도감
+                        </SvgText>
+                        <SvgText
+                            x="0"
+                            y="26"
+                            fontSize="30"
+                            fontFamily="cookieB"
+                            fill="#1D96CE"      // 안쪽 글자 색
+                        >
+                            식당 도감
+                        </SvgText>
+                    </Svg>
                 </TouchableOpacity>
 
-                {/* 오른쪽 하단 내 교환권 */}
-                <TouchableOpacity style={[styles.iconButton, { bottom: "12%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
+                {/* 오른쪽 하단 내 교환권 F0AD04 */}
+                <TouchableOpacity style={[styles.iconButton, { top: "68%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
                     <Image source={require("../../assets/images/intro_ticket.png")} style={styles.iconImage} />
-                    <Text style={[styles.iconText, { color: "#F0AD04" }, { marginTop: -14}]}>내 교환권</Text>
+                    <Svg height="80" width="120">
+                        <SvgText
+                            x="0"
+                            y="26"
+                            fontSize="30"
+                            fontFamily="cookieB"
+                            stroke="#fff"       // 테두리 색
+                            strokeWidth="4"     // 테두리 굵기
+                        >
+                            내 교환권
+                        </SvgText>
+                        <SvgText
+                            x="0"
+                            y="26"
+                            fontSize="30"
+                            fontFamily="cookieB"
+                            fill="#F0AD04"      // 안쪽 글자 색
+                        >
+                            내 교환권
+                        </SvgText>
+                    </Svg>
                 </TouchableOpacity>
 
         </ImageBackground>
@@ -74,7 +126,7 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: "140%",
+        marginBottom: "130%",
         borderRadius: 10,
         paddingVertical: 26,
         paddingHorizontal: 24,
@@ -101,7 +153,9 @@ const styles = StyleSheet.create({
     },
     profileText: {
         justifyContent: "center",
+        marginLeft: "4%",
     },
+
     department: {
         fontSize: 16,
         fontFamily: "cookieB",
