@@ -14,14 +14,15 @@ export default function IntroScreen() {
         return null;
     }
 
-    const handleLogin = () => {
+    const handleSignup = () => {
         // 백엔드 API 연동 예정
-        console.log("학번", studentId, "비번", password);
         router.push("/select");
     }
 
-    const handleGuest = () => {
-        router.push("/select");
+    const handleEnter = () => {
+        // 백엔드 API 연동 예정
+        console.log("학번", studentId, "비번", password);
+        router.push("/chat");
     }
 
     return (
@@ -31,13 +32,13 @@ export default function IntroScreen() {
                 <Image source={require("../assets/images/title.png")} style={styles.titleImage} />
                 <Text style={[styles.subtitle, styles.subtitleStroke]}>방학미션 시작! 인후를 구해라!</Text>
                 <TextInput style={styles.input} placeholder="학번" placeholderTextColor="#7F7F7F" value={studentId} onChangeText={setStudentId} />
-                <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#7F7F7F" value={password} onChangeText={setPassword} />
+                <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#7F7F7F" value={password} onChangeText={setPassword} secureTextEntry={true}/>
                 <View style={styles.buttonRow}>
-                    <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                        <Text style={styles.buttonText}>입장하기</Text>
+                    <TouchableOpacity style={styles.button} onPress={handleSignup}>
+                        <Text style={styles.buttonText}>가입하기</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={handleGuest}>
-                        <Text style={styles.buttonText}>게스트 입장</Text>
+                    <TouchableOpacity style={styles.button} onPress={handleEnter}>
+                        <Text style={styles.buttonText}>입장하기</Text>
                     </TouchableOpacity>
                 </View>
             </View>
