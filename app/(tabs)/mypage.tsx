@@ -9,7 +9,7 @@ export default function MyPageScreen() {
     const profile = {
         name: "오예송",
         department: "디자인테크놀로지학과",
-        points: 200,
+        points: 100,
         image: require("../../assets/images/woman.png"),
     };
 
@@ -36,6 +36,15 @@ export default function MyPageScreen() {
                     <Image source={require("../../assets/images/intro_gift.png")} style={styles.iconImage} />
                     <Text style={[styles.iconText, { color: "#EF6868" }]}>선물 상점</Text>
                 </TouchableOpacity>
+
+                {/* <Svg height="40" width="200">
+                <SvgText x="3" y="30" fontSize="20" fontFamily="cookieB" stroke="#30211A" strokeWidth="8">
+                    보유 포인트: {points}P
+                </SvgText>
+                <SvgText x="3" y="30" fontSize="20" fontFamily="cookieB" fill="#fff">
+                    보유 포인트: {points}P
+                </SvgText>
+                </Svg> */}
 
                 {/* 왼쪽 중단 식당 도감 */}
                 <TouchableOpacity style={[styles.iconButton, { top: "45%", left: "10%" }]} onPress={() => router.push("/restaurantdex")}>
@@ -65,13 +74,17 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: "148%",
-        marginLeft: "10%",
+        marginBottom: "140%",
+        borderRadius: 10,
+        paddingVertical: 26,
+        paddingHorizontal: 24,
+        backgroundColor: "rgba(255, 255, 255, 0.5)",
     },
     profileBgContainer: {
         position: "relative",
         justifyContent: "center",
         alignItems: "center",
+        marginLeft: "8%",
     },
     profileBg: {
         position: "absolute",
