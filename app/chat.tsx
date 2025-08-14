@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, ImageBackground } from "react-native";
-import { useRouter } from "expo-router";
 import { useFonts } from "expo-font";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { FlatList, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
 // 랜덤 시작 질문들
@@ -15,7 +15,6 @@ const startQuestions = [
     { role: "bot", text: "식사 분위기는 조용하게? 북적하게?" },
     { role: "bot", text: "면 요리 vs 밥 요리, 뭐가 좋아요?" },
     { role: "bot", text: "한식, 중식, 일식 중에 어떤 게 당겨요?" },
-    { role: "bot", text: "달달한 디저트 먹을래요? 네 or 아니오" },
     { role: "bot", text: "점심 예산은 넉넉하게? 절약 모드?" },
     { role: "bot", text: "매콤한 닭? 부드러운 닭?" },
     { role: "bot", text: "오늘은 고기? 채소?" },
@@ -48,8 +47,8 @@ export default function ChatScreen() {
                 {role: "bot", text: "좋아요, 이제 숲속에서 사장님들의 부탁을 들어주세요!"}
             ]);
 
-            setTimeout(() => router.push("/main"), 1000);
-        }, 800);
+            setTimeout(() => router.push("/main"), 3000);
+        }, 1000);
     };
 
     if (!fontsLoaded) {
@@ -115,7 +114,8 @@ const styles = StyleSheet.create({
     inputContainer: { 
         flexDirection: "row", 
         alignItems: "center", 
-        paddingVertical: 5 
+        paddingVertical: 5,
+        marginBottom: -30,
     },
     input: { 
         flex: 1, 
