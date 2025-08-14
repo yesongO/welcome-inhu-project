@@ -3,17 +3,20 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
 import QuestModal from "../../components/QuestModal";
 import TopBar from "../../components/TopBar";
+import { Quest, useQuestStore } from "../store/questStore";
 
-type Quest = {
-    title: string;
-    reward: number;
-    description: string;
-    characterImage?: any;
-};
+// export interface Quest {
+//     id: string;
+//     title: string;
+//     reward: number;
+//     image: any;
+//     description: string;
+// }
 
 export default function MainScreen() {
     const router = useRouter();
     const userPoints = 100; // 나중에 API로 가져올 나의 포인트
+    const { acceptQuest } = useQuestStore();
 
 
     // 전구 반짝이는 애니메이션 관련
@@ -46,24 +49,27 @@ export default function MainScreen() {
     // 현재 선택된 퀘스트 상태관리
     const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
     // 퀘스트 예시 데이터
-    const quests = [
+    const quests: Quest[] = [
             {
+                id: "1",
+                image: require("../../assets/images/excharacter_1.png"),
                 title: "식당이름",
                 reward: 100,
                 description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
-                characterImage: require("../../assets/images/excharacter_1.png"),
             },
             {
+                id: "2",
+                image: require("../../assets/images/excharacter_2.png"),
                 title: "식당이름",
                 reward: 100,
                 description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
-                characterImage: require("../../assets/images/excharacter_2.png"),
             }, 
             {
+                id: "3",
+                image: require("../../assets/images/excharacter_3.png"),
                 title: "식당이름",
                 reward: 100,
                 description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
-                characterImage: require("../../assets/images/excharacter_3.png"),
             },
     ];
     // 퀘스트 클릭 시 모달 여는 함수
@@ -77,6 +83,7 @@ export default function MainScreen() {
         // 퀘스트 수락 로직 구현
         // 예시: 퀘스트 데이터 저장 또는 서버 요청
         // 수락 후 모달 닫기
+        acceptQuest(quest); // 수락된 퀘스트 Zustand에 저장
         closeModal();
     }
     // 모달 닫는 함수

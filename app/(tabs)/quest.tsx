@@ -1,60 +1,78 @@
-// (tabs)/quest.tsx
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useQuestStore } from "../store/questStore"; // Zustand에서 수락한 퀘스트 불러오기
+import { FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useQuestStore } from "../store/questStore";
 
 export default function QuestScreen() {
-  const { acceptedQuests } = useQuestStore(); // [{ id, title, reward, image, description }, ...]
+    const { acceptedQuests } = useQuestStore();
 
     return (
-    <View style={styles.container}>
-        <Text style={styles.header}>내 퀘스트</Text>
+    <ImageBackground source={require("../../assets/images/forest_background2.png")} style={styles.background}>
+    <ImageBackground
+        source={require("../../assets/images/quest_list_box.png")}
+        style={styles.backgroundQ}
+    >
+        <View style={styles.overlay}>
+        {/* <Text style={styles.header}>내 퀘스트</Text> */}
         {acceptedQuests.length === 0 ? (
-        <Text style={styles.empty}>아직 수락한 퀘스트가 없습니다.</Text>
+            <Text style={styles.empty}>아직 수락한 퀘스트가 없습니다.</Text>
         ) : (
-        <FlatList
+            <FlatList
             data={acceptedQuests}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(_, index) => index.toString()}
             renderItem={({ item }) => (
-            <View style={styles.card}>
-                <Image source={item.image} style={styles.image} />
+                <View style={styles.card}>
+                <Image source={item.image} style={styles.characterImage} />
                 <View style={styles.info}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.reward}>보상: {item.reward}P</Text>
-                <Text style={styles.desc}>{item.description}</Text>
+                    <Text style={styles.title}>{item.title}</Text>
+                    <Text style={styles.reward}>보상: {item.reward}P</Text>
+                    <Text style={styles.desc}>{item.description}</Text>
                 </View>
                 <TouchableOpacity style={styles.completeBtn}>
-                <Text style={styles.completeText}>완료</Text>
+                    <Text style={styles.completeText}>완료</Text>
                 </TouchableOpacity>
-            </View>
+                </View>
             )}
-        />
+            />
         )}
-    </View>
+        </View>
+    </ImageBackground>
+    </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-    header: { fontSize: 24, fontWeight: "bold", marginBottom: 16 },
-    empty: { fontSize: 16, color: "#888" },
+    background: {
+        flex: 1,
+        resizeMode: "cover",
+    },
+    overlay: {
+        flex: 1,
+    },
+    backgroundQ: { 
+        flex: 1, 
+        resizeMode: "cover",
+        width: "100%",
+        height: "100%",
+    },
+    header: { fontSize: 24, fontWeight: "bold", color: "#fff", marginBottom: 20 },
+    empty: { color: "#ccc", fontSize: 16 },
     card: {
         flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#f8f8f8",
-        borderRadius: 12,
-        padding: 12,
+        backgroundColor: "rgba(255,255,255,0.9)",
+        borderRadius: 10,
         marginBottom: 10,
+        padding: 10,
+        alignItems: "center",
     },
-    image: { width: 60, height: 60, resizeMode: "contain", marginRight: 10 },
+    characterImage: { width: 50, height: 50, marginRight: 10 },
     info: { flex: 1 },
     title: { fontSize: 18, fontWeight: "bold" },
-    reward: { fontSize: 14, color: "#4CAF50" },
-    desc: { fontSize: 12, color: "#555" },
+    reward: { color: "#4CAF50", fontWeight: "600" },
+    desc: { fontSize: 14, color: "#555" },
     completeBtn: {
         backgroundColor: "#4CAF50",
-        paddingHorizontal: 10,
+        paddingHorizontal: 12,
         paddingVertical: 6,
         borderRadius: 6,
     },
-    completeText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
+    completeText: { color: "#fff", fontWeight: "bold", fontFamily: "pixel", fontSize: 16 },
 });

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface Quest {
+export interface Quest {
     id: string;
     title: string;
     reward: number;
@@ -14,8 +14,8 @@ interface QuestState {
     acceptQuest: (quest: Quest) => void;
 }
 
+// *** 퀘스트 수락하기 함수 정의 ***
 export const useQuestStore = create<QuestState>((set) => ({
-
     // 전체 퀘스트 초기값
     quests: [],
 
@@ -24,7 +24,7 @@ export const useQuestStore = create<QuestState>((set) => ({
 
     acceptQuest: (quest: Quest) =>
         set((state) => ({
-        quests: [...state.quests, quest],
-        acceptedQuests: [...state.acceptedQuests, quest],
+        quests: [...state.quests, quest], // 전체 퀘스트 목록에 추가 (추후 수정?)
+        acceptedQuests: [...state.acceptedQuests, quest], // 수락한 퀘스트 목록에 추가
     })),
 }));

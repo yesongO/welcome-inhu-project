@@ -8,11 +8,20 @@ import { useFonts } from "expo-font";
 import { Image, ImageBackground, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
+// export interface Quest {
+//     id: string;
+//     title: string;
+//     reward: number;
+//     image: any;
+//     description: string;
+// }
+
 type Quest = {
+    id: string;
     title: string;
     reward: number;
+    image: any;
     description: string;
-    characterImage?: any;
 };
 
 type QuestModalProps = {
@@ -49,7 +58,7 @@ export default function QuestModal({
 
             {/* 캐릭터 + 제목 */}
             <View style={styles.header}>
-                <Image source={ quest.characterImage } style={styles.characterImage} />
+                <Image source={ quest.image} style={styles.characterImage} />
                 <View>
                     <Text style={styles.title}>{quest.title}</Text>
                     <Text style={styles.title}>사장님의 부탁</Text>
