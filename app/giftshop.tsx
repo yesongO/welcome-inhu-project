@@ -5,100 +5,297 @@ import { useRouter } from "expo-router";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
+// 임시 보상 데이터 나중에 수정할거
+const rewards = [
+    { id: "r1", label: "포인트 10", kind: "point" as const, amount: 10},
+    { id: "r2", label: "포인트 30", kind: "point" as const, amount: 30 },
+  { id: "r3", label: "인덕이 키링 교환권", kind: "coupon" as const },
+  { id: "r4", label: "학과별 스티커", kind: "item" as const },
+];
+const pickRandomReward =() => {
+    const idx = Math.floor(Math.random() * rewards.length);
+    return rewards[idx];
+};
+
+
 export default function GiftShopScreen() {
-    const router = useRouter();
+  const router = useRouter();
 
-    return (
-        <ImageBackground source={require("../assets/images/sky_background.png")} style={styles.background}>
-            <View style={styles.overlay}></View>
+  const items = [
+    { id: "g1", name: "box 1", premium: false, image: require("../assets/images/boxes_1.png") },
+    { id: "g2", name: "box 2", premium: false, image: require("../assets/images/boxes_2.png") },
+    { id: "g3", name: "box 3", premium: false, image: require("../assets/images/boxes_3.png") },
+    { id: "g4", name: "box 4", premium: false, image: require("../assets/images/boxes_4.png") },
+    { id: "g5", name: "box 5", premium: false, image: require("../assets/images/boxes_5.png") },
+    { id: "g6", name: "프리미엄 ", premium: true, image: require("../assets/images/special_gift_1.png") },
+  ];
 
-                {/* 왼쪽 상단 뒤로가기 버튼 */}
-                <TouchableOpacity style={styles.backButton} onPress={() => router.push("/mypage")}>
-                    <Text style={styles.backText}>←</Text>
-                </TouchableOpacity>
+  const regularItems = items.filter(i => !i.premium).slice(0, 6);
+  const topRow = regularItems.slice(0, 2);     // 2개
+  const bottomRow = regularItems.slice(2, 5);  // 3개
 
-                {/* 선물 상점 아이콘 & 글자 */}
-                <View style={styles.iconRow}>
-                    <Image source={require("../assets/images/intro_gift.png")} style={styles.iconImage} />
-                    <View>
-                        <Svg height="80" width="120">
-                            <SvgText
-                                x="0"
-                                y="26"
-                                fontSize="30"
-                                fontFamily="cookieB"
-                                stroke="#fff"       // 테두리 색
-                                strokeWidth="4"     // 테두리 굵기
-                            >
-                                선물 상점
-                            </SvgText>
-                            <SvgText
-                                x="0"
-                                y="26"
-                                fontSize="30"
-                                fontFamily="cookieB"
-                                fill="#EF6868"      // 안쪽 글자 색
-                            >
-                                선물 상점
-                            </SvgText>
-                        </Svg>
-                        <Text style={styles.pointText}>내 포인트 : 100 P</Text>
-                    </View>
-                </View>
+ const handlePick = (boxId: string) => {
+  const reward = pickRandomReward();
+  router.push({
+    pathname: "/obtain-gift",
+    params: {
+      boxId, 
+      rewardLabel: reward.label,
+      kind: reward.kind,
+      amount: reward.kind === "point" ? String(reward.amount) : "",
+    },
+  });
+};
 
-        </ImageBackground>
-    );
+
+  return (
+    <ImageBackground source={require("../assets/images/sky_background.png")} style={styles.background}>
+      <View style={styles.overlay} />
+
+      {/* 왼쪽 상단 뒤로가기 버튼 */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => router.push("/mypage")}
+        accessibilityRole="button"
+        accessibilityLabel="뒤로가기"
+      >
+        <Text style={styles.backText}>←</Text>
+      </TouchableOpacity>
+
+      {/* 선물 상점 아이콘 & 글자 */}
+      <View style={styles.iconRow}>
+        <Image source={require("../assets/images/intro_gift.png")} style={styles.iconImage} />
+        <View>
+          <Svg height="80" width="120">
+            <SvgText
+              x="0"
+              y="26"
+              fontSize="30"
+              fontFamily="cookieB"
+              stroke="#fff"
+              strokeWidth="4"
+            >
+              선물 상점
+            </SvgText>
+            <SvgText
+              x="0"
+              y="26"
+              fontSize="30"
+              fontFamily="cookieB"
+              fill="#EF6868"
+            >
+              선물 상점
+            </SvgText>
+          </Svg>
+          <Text style={styles.pointText}>내 포인트 : 20 P</Text>
+        </View>
+      </View>
+
+      {/* 컨텐츠 */}
+      <View style={styles.content}>
+        {/* 상자 그리드 */}
+        <View style={styles.dashedBox}>
+          <View style={[styles.gridRow, { marginBottom: 12 }]}>
+            {topRow.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.card}
+                onPress={() => handlePick(item.id)}
+              >
+                <Image source={item.image} style={styles.cardImage} />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.gridRow}>
+            {bottomRow.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.card}
+                onPress={() => handlePick(item.id)}
+              >
+                <Image source={item.image} style={styles.cardImage} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* 안내 보드 */}
+        <View style={{ marginTop: -30, alignItems: "center" }}>
+          <ImageBackground
+            source={require("../assets/images/gift-board.png")}
+            style={{
+              width: "100%",
+              minHeight: 170,
+              alignItems: "center",  
+      marginLeft: "auto",    
+      marginRight: "auto", 
+               justifyContent: "center",
+        
+            }}
+            resizeMode="stretch"
+            imageStyle={styles.boardImage}
+          >
+            <Text style={[styles.infoText, {textAlign: "center"}]}>
+              20 포인트를 사용해 {"\n"}
+              랜덤선물을 뽑아보세요 !{"\n"}
+              얻을 수 있는 보상 (예시) {"\n"}
+              {"\n"}
+              • 포인트 10 {"\n"}
+              • 인덕이 키링 교환권 {"\n"}
+              • 학과별 스티커 {"\n"}
+            </Text>
+          </ImageBackground>
+        </View>
+
+        {/* 프리미엄 상품 */}
+        <TouchableOpacity
+          style={styles.premiumRow}
+          onPress={() =>
+            router.push({
+              pathname: "/obtain-gift",
+              params: {  rewardLabel: "프리미엄 스페이스 출입증",
+                kind: "premium", },
+            })
+          }
+        >
+          <Image
+            source={require("../assets/images/special_gift_1.png")}
+            style={styles.premiumImage}
+          />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.premiumTitle}>
+                프리미엄 스페이스 교환권 {"\n"}
+                가격: 500 P
+                </Text>
+            
+          </View>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
-    background: {
-        flex: 1,
-        resizeMode: "cover",
-    },
-    overlay: {
-        flex: 1,
-    },
-    backButton: {
-        position: "absolute",
-        top: 60,
-        left: 18,
-        padding: 12,
-        width: 54,
-        height: 54,
-        backgroundColor: "rgba(255,255,255,0.7)",
-        borderRadius: 50,
-        justifyContent: "center",
-        alignItems: "center",
-        borderWidth: 3,
-        borderColor: "#000",
-    },
-    backText: {
-        fontSize: 30,
-        fontFamily: "cookieB",
-        fontWeight: "bold",
-        color: "#000",
-        marginTop: -8,
-    },
-    iconRow: {
-        position: "absolute",
-        top: "10%",
-        left: 0,
-        right: 0,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    iconImage: {
-        width: 120,
-        height: 120,
-        resizeMode: "contain",
-        marginBottom: 8,
-    },
-    pointText: {
-        fontSize: 20,
-        fontFamily: "cookieB",
-        color: "#fff",
-        textAlign: "center",
-        marginTop: -38
-    },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  overlay: {
+    flex: 1,
+  },
+  backButton: {
+    position: "absolute",
+    top: 60,
+    left: 18,
+    padding: 12,
+    width: 54,
+    height: 54,
+    backgroundColor: "rgba(255,255,255,0.7)",
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
+    borderColor: "#000",
+    zIndex: 10,
+  },
+  backText: {
+    fontSize: 30,
+    fontFamily: "cookieB",
+    fontWeight: "bold",
+    color: "#000",
+    marginTop: -8,
+  },
+  iconRow: {
+    position: "absolute",
+    top: "10%",
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 5,
+  },
+  iconImage: {
+    width: 120,
+    height: 120,
+    resizeMode: "contain",
+    marginBottom: 8,
+  },
+  pointText: {
+    fontSize: 20,
+    fontFamily: "cookieB",
+    color: "#fff",
+    textAlign: "center",
+    marginTop: -38,
+  },
+  content: {
+    position: "absolute",
+    left: 16,
+    right: 16,
+    top: "22%",
+    bottom: 24,
+  },
+  dashedBox: {
+    borderWidth: 5,
+    borderStyle: "dashed",
+    borderColor: "#6B4D33",
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    backgroundColor: "transparent",
+  },
+  gridRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 1,
+    marginBottom: 1,
+  },
+  card: {
+    width: "37%",
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cardImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+  },
+  infoText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: "#6B4D33",
+     fontFamily: "cookieB",
+     marginBottom: 20,
+     marginTop: 40,
+  },
+  premiumRow: {
+    marginTop: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+   
+  },
+  premiumImage: {
+    width: 130,
+    height: 130,
+    resizeMode: "contain",
+    marginRight: 8,
+  },
+  premiumTitle: {
+    fontSize: 20,
+    fontFamily: "cookieB",
+    color: "#3A2A0A",
+  },
+  premiumPrice: {
+    marginTop: 4,
+    fontSize: 14,
+    color: "#3A2A0A",
+  },
+  boardImage: {
+  borderRadius: 12,
+  marginLeft: -2,   
+},
+
 });
