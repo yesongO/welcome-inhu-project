@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import React from "react";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import QuestDetailModal from "../../components/QuestDetailModal";
 import { useQuestStore } from "../store/questStore";
 
 type Quest = {
@@ -13,8 +13,7 @@ type Quest = {
 
 export default function QuestScreen() {
     const { acceptedQuests } = useQuestStore();
-    const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
-    const [modalVisible, setModalVisible] = useState(false);
+    const router = useRouter();
 
     // 퀘스트 예시 데이터 (실제로는 store에서 가져올 예정)
     const quests: Quest[] = [
@@ -41,14 +40,8 @@ export default function QuestScreen() {
         },
     ];
 
-    const openQuestDetail = (quest: Quest) => {
-        setSelectedQuest(quest);
-        setModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setModalVisible(false);
-        setSelectedQuest(null);
+    const handleAuthenticate = () => {
+        router.push("/camera");
     };
 
     return (
@@ -63,11 +56,7 @@ export default function QuestScreen() {
                     {/* 퀘스트 정보 */}
                     <View style={styles.questSection}>
                         {quests.map((quest, index) => (
-                            <TouchableOpacity
-                                key={quest.id}
-                                style={styles.questItem}
-                                onPress={() => openQuestDetail(quest)}
-                            >
+                            <View key={quest.id} style={styles.questItem}>
                                 <View style={styles.characterContainer}>
                                     <Image source={quest.image} style={styles.characterImage} />
                                 </View>
@@ -77,7 +66,7 @@ export default function QuestScreen() {
                                         <TouchableOpacity style={styles.viewQuestBtn}>
                                             <Text style={styles.viewQuestText}>퀘스트보기</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.authenticateBtn}>
+                                        <TouchableOpacity style={styles.authenticateBtn} onPress={handleAuthenticate}>
                                             <Image 
                                                 source={require("../../assets/images/camera.png")} 
                                                 style={[styles.cameraIcon, { tintColor: "#FFFFFF" }]} 
@@ -86,20 +75,11 @@ export default function QuestScreen() {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </View>
                         ))}
                     </View>
                 </ImageBackground>
             </View>
-
-            {/* 퀘스트 상세 모달 */}
-            {selectedQuest && (
-                <QuestDetailModal
-                    visible={modalVisible}
-                    onClose={closeModal}
-                    quest={selectedQuest}
-                />
-            )}
         </ImageBackground>
     );
 }
@@ -161,6 +141,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start", // space-between에서 flex-start로 변경
         width: "100%",
         gap: 15, // 버튼 간 간격을 늘림
+        alignItems: 'center', // 버튼들을 세로 중앙 정렬
     },
     viewQuestBtn: {
         backgroundColor: "#6A4546", // 사진과 똑같은 어두운 갈색
@@ -171,12 +152,15 @@ const styles = StyleSheet.create({
         borderColor: "#FFFFFF",
         minWidth: 100,
         alignItems: "center",
+        justifyContent: 'center', // 버튼 내 텍스트 중앙 정렬
+        height: 40, // 고정 높이로 버튼 크기 통일
     },
     viewQuestText: {
         color: "#fff",
         fontFamily: "pixel",
         fontSize: 14,
         fontWeight: "bold",
+        textAlign: 'center', // 텍스트 중앙 정렬
     },
     authenticateBtn: {
         backgroundColor: "#6A4546", // 퀘스트보기 버튼과 같은 색
@@ -187,17 +171,21 @@ const styles = StyleSheet.create({
         borderColor: "#FFFFFF",
         minWidth: 100,
         alignItems: "center",
+        justifyContent: 'center', // 버튼 내 콘텐츠 중앙 정렬
         flexDirection: "row",
+        height: 40, // 고정 높이로 버튼 크기 통일
     },
     cameraIcon: {
-        width: 16,
-        height: 16,
-        marginRight: 6,
+        width: 24,
+        height: 24,
+        marginRight: 8,
+        tintColor: "#FFFFFF",
     },
     authenticateText: {
         color: "#fff",
         fontFamily: "pixel",
         fontSize: 14,
         fontWeight: "bold",
+        textAlign: 'center', // 텍스트 중앙 정렬
     },
 });
