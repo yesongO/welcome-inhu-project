@@ -22,8 +22,10 @@ export default function CameraScreen() {
             {
                 text: '촬영',
                 onPress: () => {
-                    Alert.alert('사진 촬영 완료', '영수증이 촬영되었습니다.');
-                    // 여기에 API 호출 로직 추가 가능
+                    // 영수증 API 인식 시뮬레이션
+                    setTimeout(() => {
+                        router.push("/complete" as any);
+                    }, 1000);
                 },
             },
         ]);
