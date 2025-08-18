@@ -14,7 +14,7 @@ export default function CompleteScreen() {
     }
 
     const handleGoBack = () => {
-        router.back();
+        router.push("/(tabs)/quest" as any);
     };
 
     return (
@@ -61,13 +61,15 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     completeArea: {
-        flex: 1,
         backgroundColor: "rgba(255, 255, 255, 0.9)",
         borderRadius: 20,
-        padding: 30,
+        padding: 40, // 패딩을 늘려서 상하 길이 증가
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 100, // TopBar 아래로 여백 조정
+        justifyContent: 'flex-start', // 상단부터 시작하도록 변경
+        marginTop: 110, // TopBar 아래로 여백 조정
+        marginHorizontal: 5, // 좌우 여백을 더 줄여서 박스를 더 길게 만듦
+        paddingTop: 250, // 상단 패딩을 더 늘려서 상하 길이 증가
+        paddingBottom: 40, // 하단 패딩 추가로 상하 길이 증가
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -79,24 +81,24 @@ const styles = StyleSheet.create({
     },
     messageContainer: {
         alignItems: 'center',
-        marginBottom: 40,
+        marginBottom: 30, // 여백 줄임
     },
     restaurantName: {
-        fontSize: 24,
+        fontSize: 22, // 폰트 크기 줄임
         fontFamily: "pixel",
         color: "#000000",
         fontWeight: "bold",
-        marginBottom: 15,
+        marginBottom: 12, // 여백 줄임
     },
     completeText: {
-        fontSize: 28,
+        fontSize: 26, // 폰트 크기 줄임
         fontFamily: "pixel",
         color: "#000000",
         fontWeight: "bold",
-        marginBottom: 15,
+        marginBottom: 12, // 여백 줄임
     },
     pointsText: {
-        fontSize: 32,
+        fontSize: 30, // 폰트 크기 줄임
         fontFamily: "pixel",
         color: "#4CAF50",
         fontWeight: "bold",
@@ -104,15 +106,17 @@ const styles = StyleSheet.create({
     characterSection: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 40,
+        marginBottom: 30, // 여백 줄임
+        marginTop: 10, // 상단 여백 추가
     },
     characterImage: {
-        width: 80,
-        height: 80,
+        width: 100,
+        height: 100,
         marginRight: 20,
+        marginTop: 0, // 상단 여백 제거
     },
     thankYouText: {
-        fontSize: 24,
+        fontSize: 22, // 폰트 크기 줄임
         fontFamily: "pixel",
         color: "#000000",
         fontWeight: "bold",
