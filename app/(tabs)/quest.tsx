@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom: 25,
         paddingBottom: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: "rgba(0,0,0,0.1)",
+        borderBottomWidth: 2,
+        borderBottomColor: "#FFFFFF", // 구분선을 흰색으로 변경
     },
     characterContainer: {
         width: 80,
@@ -139,15 +139,13 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         alignItems: 'center',        // 가로 중앙
         justifyContent: 'flex-start',// 세로 상단에 붙이기 (머리 안 잘림)
-      },
-      characterImage: {
+    },
+    characterImage: {
         width: 80,
         height: 130,    // 컨테이너(80)보다 더 크게 → 아래쪽만 잘림
         resizeMode: 'contain',
         marginTop: 0,
-      },
-      
-
+    },
     questInfo: {
         flex: 1,
     },
@@ -160,15 +158,16 @@ const styles = StyleSheet.create({
     },
     actionButtons: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-start", // space-between에서 flex-start로 변경
         width: "100%",
+        gap: 15, // 버튼 간 간격을 늘림
     },
     viewQuestBtn: {
         backgroundColor: "#6A4546", // 사진과 똑같은 어두운 갈색
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
-        borderWidth: 2,
+        borderWidth: 4, // 테두리를 더 두껍게
         borderColor: "#FFFFFF",
         minWidth: 100,
         alignItems: "center",
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
-        borderWidth: 2,
+        borderWidth: 4, // 테두리를 더 두껍게
         borderColor: "#FFFFFF",
         minWidth: 100,
         alignItems: "center",
