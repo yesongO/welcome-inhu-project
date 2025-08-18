@@ -1,34 +1,86 @@
+import { CameraType, CameraView, FlashMode, useCameraPermissions } from 'expo-camera';
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React from 'react';
-import { Alert, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import TopBar from "../components/TopBar";
 import { customFonts } from "../constants/Fonts";
+
+const { width: screenWidth } = Dimensions.get('window');
 
 export default function CameraScreen() {
     const router = useRouter();
     const [fontsLoaded] = useFonts(customFonts);
+    const [permission, requestPermission] = useCameraPermissions();
+    const [cameraType, setCameraType] = useState<CameraType>('back');
+    const [flashMode, setFlashMode] = useState<FlashMode>('off');
+    const cameraRef = useRef<any>(null);
+
+    useEffect(() => {
+        if (permission && !permission.granted) {
+            requestPermission();
+        }
+    }, [permission, requestPermission]);
 
     if (!fontsLoaded) {
         return null;
     }
 
-    const takePicture = () => {
-        Alert.alert('사진 촬영', '영수증을 촬영하시겠습니까?', [
-            {
-                text: '취소',
-                style: 'cancel',
-            },
-            {
-                text: '촬영',
-                onPress: () => {
-                    // 영수증 API 인식 시뮬레이션
-                    setTimeout(() => {
-                        router.push("/complete" as any);
-                    }, 1000);
-                },
-            },
-        ]);
+    if (!permission) {
+        return (
+            <View style={styles.permissionContainer}>
+                <Text style={styles.permissionText}>카메라 권한을 요청 중입니다...</Text>
+            </View>
+        );
+    }
+
+    if (!permission.granted) {
+        return (
+            <View style={styles.permissionContainer}>
+                <Text style={styles.permissionText}>카메라 접근 권한이 거부되었습니다.</Text>
+                <TouchableOpacity 
+                    style={styles.permissionButton}
+                    onPress={() => router.back()}
+                >
+                    <Text style={styles.permissionButtonText}>돌아가기</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const takePicture = async () => {
+        if (cameraRef.current) {
+            try {
+                const photo = await cameraRef.current.takePictureAsync({
+                    quality: 0.8,
+                    base64: true,
+                });
+                
+                Alert.alert('사진 촬영 완료', '영수증을 촬영했습니다!', [
+                    {
+                        text: '확인',
+                        onPress: () => {
+                            // 여기서 촬영된 사진을 처리하거나 저장할 수 있습니다
+                            router.push("/complete" as any);
+                        },
+                    },
+                ]);
+            } catch (error) {
+                Alert.alert('오류', '사진 촬영에 실패했습니다.');
+            }
+        }
+    };
+
+    const toggleCameraType = () => {
+        setCameraType((current: CameraType) => (
+            current === 'back' ? 'front' : 'back'
+        ));
+    };
+
+    const toggleFlash = () => {
+        setFlashMode((current: FlashMode) => (
+            current === 'off' ? 'on' : 'off'
+        ));
     };
 
     return (
@@ -43,7 +95,13 @@ export default function CameraScreen() {
                     
                     {/* 카메라 프리뷰 영역 */}
                     <View style={styles.cameraContainer}>
-                        <View style={styles.cameraPreview}>
+                        <CameraView
+                            ref={cameraRef}
+                            style={styles.camera}
+                            facing={cameraType}
+                            flash={flashMode}
+                            ratio="4:3"
+                        >
                             {/* 영수증 가이드 프레임 */}
                             <View style={styles.receiptFrame}>
                                 <View style={[styles.corner, styles.topLeft]} />
@@ -51,11 +109,22 @@ export default function CameraScreen() {
                                 <View style={[styles.corner, styles.bottomLeft]} />
                                 <View style={[styles.corner, styles.bottomRight]} />
                             </View>
-                            <Text style={styles.cameraPlaceholder}>카메라 프리뷰</Text>
-                        </View>
+                            
+                            {/* 카메라 컨트롤 버튼들 */}
+                            <View style={styles.cameraControls}>
+                                <TouchableOpacity style={styles.controlButton} onPress={toggleCameraType}>
+                                    <Text style={styles.controlButtonText}>전환</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.controlButton} onPress={toggleFlash}>
+                                    <Text style={styles.controlButtonText}>
+                                        {flashMode === 'off' ? '플래시' : '플래시 끄기'}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </CameraView>
                     </View>
 
-                    {/* 카메라 버튼 */}
+                    {/* 카메라 촬영 버튼 */}
                     <TouchableOpacity style={styles.cameraButton} onPress={takePicture}>
                         <View style={styles.cameraIcon}>
                             <Image 
@@ -78,6 +147,31 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+    },
+    permissionContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        padding: 20,
+    },
+    permissionText: {
+        fontSize: 18,
+        fontFamily: "pixel",
+        color: "#000000",
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    permissionButton: {
+        backgroundColor: '#007AFF',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 8,
+    },
+    permissionButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontFamily: "pixel",
     },
     cameraArea: {
         flex: 1,
@@ -111,22 +205,18 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginVertical: 20,
     },
-    cameraPreview: {
+    camera: {
         flex: 1,
-        backgroundColor: '#F5F5F5',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        position: 'relative',
-    },
-    cameraPlaceholder: {
-        fontSize: 16,
-        color: '#666',
-        fontFamily: "pixel",
     },
     receiptFrame: {
-        width: 280,
+        width: Math.min(screenWidth - 80, 280),
         height: 180,
         position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: [{ translateX: -Math.min(screenWidth - 80, 280) / 2 }, { translateY: -90 }],
     },
     corner: {
         position: 'absolute',
@@ -159,6 +249,24 @@ const styles = StyleSheet.create({
         right: 0,
         borderLeftWidth: 0,
         borderTopWidth: 0,
+    },
+    cameraControls: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        flexDirection: 'column',
+        gap: 10,
+    },
+    controlButton: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 6,
+    },
+    controlButtonText: {
+        color: '#fff',
+        fontSize: 12,
+        fontFamily: "pixel",
     },
     cameraButton: {
         marginBottom: 30,
