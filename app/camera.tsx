@@ -60,7 +60,7 @@ export default function CameraScreen() {
                     {
                         text: '확인',
                         onPress: () => {
-                            // 여기서 촬영된 사진을 처리하거나 저장할 수 있습니다
+                            // 여기서 촬영된 사진을 처리하거나 저장할 수 있습니다!!!
                             router.push("/complete" as any);
                         },
                     },
