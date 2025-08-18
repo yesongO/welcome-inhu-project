@@ -1,7 +1,8 @@
 // app/obtain-gift.tsx
 // 뽑기 결과 화면 (본문 없이 기본 구조만)
 
-import {useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
@@ -25,17 +26,23 @@ const BOX_IMAGES: Record<string, any> = {
 export default function ObtainGiftScreen() {
   const router = useRouter();
   const { boxId, rewardLabel, kind, amount } = useLocalSearchParams<Params>();
- 
-   const boxImage = boxId && BOX_IMAGES[boxId] ? BOX_IMAGES[boxId] : BOX_IMAGES["g1"];
-   const resultText =
+
+  const boxImage = boxId && BOX_IMAGES[boxId] ? BOX_IMAGES[boxId] : BOX_IMAGES["g1"];
+  const resultText =
     kind === "point" && amount ? `${amount} point` : String(rewardLabel ?? "보상을 획득했어요");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.back();
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <ImageBackground
       source={require("../assets/images/sky_background.png")}
       style={styles.bg}
       resizeMode="cover">
-       
 
       {/* 선물 상점 아이콘 & 글자 */}
       <View style={styles.iconRow}>
@@ -73,7 +80,7 @@ export default function ObtainGiftScreen() {
       
 
       
-      <View style={styles.boxWrapper}>
+  <View style={styles.boxWrapper}>
   {/* 폭죽 배경 */}
   <Image
     source={require("../assets/images/gift-deco.png")}
