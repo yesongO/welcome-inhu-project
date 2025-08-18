@@ -37,7 +37,7 @@ export default function GiftShopScreen() {
 
   // 임시데이터(테스트용) — 나중에 API 연결 후 수정
   const items: Item[] = [
-    { name: "미식당" },
+    {} ,
     {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
   ];
 
@@ -126,18 +126,7 @@ export default function GiftShopScreen() {
         ))}
       </View>
 
-      {/* 넘어가기 버튼 */}
-<TouchableOpacity
-  style={styles.rightImage}
-  onPress={() => router.push("/restaurantdex2")}
-  accessibilityRole="button"
-  accessibilityLabel="넘어가기"
->
-  <Image
-    source={require("../assets/images/right1.png")}
-    
-  />
-</TouchableOpacity>
+     
 
 
       
@@ -226,10 +215,7 @@ const styles = StyleSheet.create({
   circleGrid: {
     marginTop: -300,
     marginLeft: 55,
-    marginBottom: 0,
+    marginBottom: 20,
   },
-  rightImage: {
-    marginLeft: 300,
-    marginTop:-30,
-  },
+ 
 });
