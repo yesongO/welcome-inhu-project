@@ -1,12 +1,21 @@
+// select.tsx
+// 가입하기 화면 ( 학번, 비번, 성별, 학과, 닉네임 )
+
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
+// signup API 임포트
+import { signup } from "../app/api/auth";
+
 export default function SelectScreen() {
     const router = useRouter();
     const [fontsLoaded] = useFonts(customFonts);
+
+    const [studentId, setStudentId] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [gender, setGender] = useState<string | null>(null);
     const [department, setDepartment] = useState<string>("");
     const [nickname, setNickname] = useState<string>("");
@@ -18,26 +27,17 @@ export default function SelectScreen() {
     const handleGenderSelect = async (selectedGender: string) => {
         setGender(selectedGender);
 
-        // 입력값 포함한 객체 생성
-        const userData = {
-            department,
-            nickname,
-            gender: selectedGender,
-        };
-
         try {
-            // // API POST 요청 (예시 URL)
-            // await fetch("https://your-api.com/register", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     body: JSON.stringify(userData),
-            // });
-
+            const res = await signup(
+                studentId, 
+                password, 
+                selectedGender, 
+                department, 
+                nickname
+            );
             // 성공하면 설명 페이지로 이동
+            console.log("회원가입 성공:", res);
             router.push("/explain");
-            console.log("성별:",selectedGender, "학과:", department, "닉네임:", nickname);
         } catch (error) {
             console.error("회원가입 오류:", error);
         }
@@ -47,17 +47,33 @@ export default function SelectScreen() {
     return (
         <ImageBackground source={require("../assets/images/forest_background1.png")} style={styles.background}>
             <View style={styles.overlay}>
+
+                {/* 학번 */}
+                <Text style={styles.text}>
+                    당신의 학번은?
+                </Text>
+                <TextInput style={styles.input} placeholder="학번" placeholderTextColor="#EAEAEA" value={studentId} onChangeText={setStudentId} />
+
+                {/* 비번 */}
+                <Text style={styles.text}>
+                    당신의 비밀번호는?
+                </Text>
+                <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#EAEAEA" value={password} onChangeText={setPassword} />
+
+                {/* 학과 */}
                 <Text style={styles.text}>
                     당신의 학과는?
                 </Text>
                 <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} />
 
+                {/* 닉네임 */}
                 <Text style={styles.text}>
                     당신의 닉네임은?
                 </Text>
                 <TextInput style={styles.input} placeholder="닉네임" placeholderTextColor="#EAEAEA" value={nickname} onChangeText={setNickname} />
 
-            <Image source={require("../assets/images/select_title.png")} style={styles.titleImage} />
+                {/* 성별 */}
+                <Image source={require("../assets/images/select_title.png")} style={styles.titleImage} />
 
                 <View style={styles.genderRow}>
                     <TouchableOpacity
