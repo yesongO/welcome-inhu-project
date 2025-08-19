@@ -49,63 +49,64 @@ export default function SelectScreen() {
             <View style={styles.overlay}>
 
                 {/* 학번 */}
-                <Text style={styles.text}>
-                    당신의 학번은?
-                </Text>
-                <TextInput style={styles.input} placeholder="학번" placeholderTextColor="#EAEAEA" value={studentId} onChangeText={setStudentId} />
+                <View style={styles.idContainer}>
+                    <Image source={require("../assets/images/id_title.png")} style={[styles.titleImage, { width: "54%" }]} />
+                    <TextInput style={styles.input} placeholder="학번" placeholderTextColor="#EAEAEA" value={studentId} onChangeText={setStudentId} />
+                </View>
 
                 {/* 비번 */}
-                <Text style={styles.text}>
-                    당신의 비밀번호는?
-                </Text>
-                <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#EAEAEA" value={password} onChangeText={setPassword} />
+                <View style={styles.pwContainer}>
+                    <Image source={require("../assets/images/pw_title.png")} style={styles.titleImage} />
+                    <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#EAEAEA" value={password} onChangeText={setPassword} />
+                </View>
 
                 {/* 학과 */}
-                <Text style={styles.text}>
-                    당신의 학과는?
-                </Text>
-                <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} />
+                <View style={styles.departmentContainer}>
+                    <Image source={require("../assets/images/dp_title.png")} style={[styles.titleImage, { width: "52%" }]} />
+                    <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} />
+                </View>
 
                 {/* 닉네임 */}
-                <Text style={styles.text}>
-                    당신의 닉네임은?
-                </Text>
-                <TextInput style={styles.input} placeholder="닉네임" placeholderTextColor="#EAEAEA" value={nickname} onChangeText={setNickname} />
+                <View style={styles.nicknameContainer}>
+                    <Image source={require("../assets/images/nick_title.png")} style={styles.titleImage} />
+                    <TextInput style={styles.input} placeholder="닉네임" placeholderTextColor="#EAEAEA" value={nickname} onChangeText={setNickname} />
+                </View>
 
                 {/* 성별 */}
-                <Image source={require("../assets/images/select_title.png")} style={styles.titleImage} />
+                <View style={styles.genderContainer}>
+                    <Image source={require("../assets/images/gender_title.png")} style={[styles.titleImage, { width: "52%" }]} />
+                    <View style={styles.genderRow}>
+                        <TouchableOpacity
+                            style={[
+                                styles.genderBox,
+                                gender === "male" && styles.selectedBox,
+                            ]}
+                            onPress={() => handleGenderSelect("male")}
+                        >
+                            <Image
+                                source={require("../assets/images/man.png")}
+                                style={styles.genderImage}
+                                resizeMode="contain"
+                            />
+                            <Text style={styles.genderText}>남성</Text>
+                        </TouchableOpacity>
 
-                <View style={styles.genderRow}>
-                    <TouchableOpacity
-                        style={[
-                            styles.genderBox,
-                            gender === "male" && styles.selectedBox,
-                        ]}
-                        onPress={() => handleGenderSelect("male")}
-                    >
-                        <Image
-                            source={require("../assets/images/man.png")}
-                            style={styles.genderImage}
-                            resizeMode="contain"
-                        />
-                        <Text style={styles.genderText}>남성</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={[
-                            styles.genderBox,
-                            gender === "female" && styles.selectedBox,
-                        ]}
-                        onPress={() => handleGenderSelect("female")}
-                    >
-                        <Image
-                            source={require("../assets/images/woman.png")}
-                            style={styles.genderImage}
-                            resizeMode="contain"
-                        />
-                        <Text style={styles.genderText}>여성</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity
+                            style={[
+                                styles.genderBox,
+                                gender === "female" && styles.selectedBox,
+                            ]}
+                            onPress={() => handleGenderSelect("female")}
+                        >
+                            <Image
+                                source={require("../assets/images/woman.png")}
+                                style={styles.genderImage}
+                                resizeMode="contain"
+                            />
+                            <Text style={styles.genderText}>여성</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
             </View>
         </ImageBackground>
     );
@@ -121,12 +122,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         paddingHorizontal: 20,
+        marginTop: -90,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+
     },
     titleImage: {
         width: 240,
         height: 240,
         resizeMode: "contain",
-        marginTop: -50,
+        marginBottom: -94,
     },
     genderRow: {
         flexDirection: "row",
@@ -136,7 +140,6 @@ const styles = StyleSheet.create({
     genderBox: {
         alignItems: "center",
         padding: 10,
-        marginTop: -78,
     },
     selectedBox: {
         borderColor: "#4CAF50",
@@ -149,23 +152,38 @@ const styles = StyleSheet.create({
     genderText: {
         fontFamily: "pixel",
         fontSize: 30,
-        color: "#000000",
-    },
-    text: {
-        marginBottom: 10,
-        fontFamily: "kirang",
-        fontSize: 60,
-        color: "#fff",
+        color: "#f4f4f4",
     },
     input: {
         width: "100%",
         height: 40,
         borderColor: "#fff",
-        borderWidth: 1,
+        borderWidth: 1.2,
         borderRadius: 10,
         paddingHorizontal: 10,
         color: "#fff",
         fontFamily: "pixel",
         fontSize: 30,
+    },
+    idContainer: {
+        width: "100%",
+        marginBottom: -60
+    },
+    pwContainer: {
+        width: "100%",
+        marginBottom: -60
+    },
+    departmentContainer: {
+        width: "100%",
+        marginBottom: -60
+    },
+    nicknameContainer: {
+        width: "100%",
+        marginBottom: -60
+    },
+    genderContainer: {
+        width: "100%",
+        marginBottom: -60,
+        marginTop: 10,
     },
 });

@@ -10,13 +10,11 @@ export const signup = async (
     nickname: string,
 ) => {
     try {
-        const res = await axios.post(`${BASE_URL}/users/signup/`, {
-            student_num,
-            password,
-            gender,
-            department,
-            nickname,
-        });
+        const res = await axios.post(
+            `${BASE_URL}/signup/`, 
+            { student_num, password, gender, department, nickname },
+            { headers: { "Content-Type": "application/json" }} 
+        );
         console.log("회원가입 성공:", res.data);
         return res.data;
     } catch (error: any) {

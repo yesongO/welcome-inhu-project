@@ -16,7 +16,7 @@ export default function IntroScreen() {
 
     const handleSignup = () => {
         // 백엔드 API 연동 예정
-        router.push("/select");
+        router.push("/select"); // select로 바꿔야함
     }
 
     const handleEnter = () => {
