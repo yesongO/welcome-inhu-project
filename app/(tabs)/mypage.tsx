@@ -85,7 +85,7 @@ export default function MyPageScreen() {
                 </TouchableOpacity>
 
                 {/* 오른쪽 하단 내 교환권 F0AD04 */}
-                <TouchableOpacity style={[styles.iconButton, { top: "68%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
+                <TouchableOpacity style={[styles.iconButton, { top: "62%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
                     <Image source={require("../../assets/images/intro_ticket.png")} style={[styles.iconImage, { top: 14 }]} />
                     <Svg height="80" width="120">
                         <SvgText
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: "140%",
+        marginBottom: "150%",
         borderRadius: 10,
         paddingVertical: 26,
         paddingHorizontal: 24,

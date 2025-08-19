@@ -1,3 +1,6 @@
+// app/api/auth.ts
+// 가입하기(select.tsx)에서 사용하는 회원가입 API
+
 import axios from "axios";
 
 const BASE_URL = "https://inhu-forest.p-e.kr";

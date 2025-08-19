@@ -2,8 +2,7 @@
 // 뽑기 결과 화면 (본문 없이 기본 구조만)
 
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect } from "react";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
 type Params = {
@@ -31,96 +30,122 @@ export default function ObtainGiftScreen() {
   const resultText =
     kind === "point" && amount ? `${amount} point` : String(rewardLabel ?? "보상을 획득했어요");
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.back();
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     router.back();
+  //   }, 5000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
-    <ImageBackground
-      source={require("../assets/images/sky_background.png")}
-      style={styles.bg}
-      resizeMode="cover">
+    <ImageBackground source={require("../assets/images/sky_background.png")} style={styles.background}>
+    <View style={styles.overlay} />
 
-      {/* 선물 상점 아이콘 & 글자 */}
-      <View style={styles.iconRow}>
-        <Image
-          source={require("../assets/images/intro_gift.png")}
-          style={styles.iconImage}
-        />
-        <View>
-          <Svg height="80" width="120">
-            <SvgText
-              x="0"
-              y="26"
-              fontSize="30"
-              fontFamily="cookieB"
-              stroke="#fff"
-              strokeWidth="4"
-            >
-              선물 상점
-            </SvgText>
-            <SvgText
-              x="0"
-              y="26"
-              fontSize="30"
-              fontFamily="cookieB"
-              fill="#EF6868"
-            >
-              선물 상점
-            </SvgText>
-          </Svg>
-          <Text style={styles.pointText}>내 포인트 : 20 P</Text>
-        </View>
+    {/* 왼쪽 상단 뒤로가기 버튼 */}
+    <TouchableOpacity
+      style={styles.backButton}
+      onPress={() => router.push("/mypage")}
+      accessibilityRole="button"
+      accessibilityLabel="뒤로가기"
+    >
+      <Image source={require("../assets/images/back_arrow.png")} style={styles.backArrow} />
+    </TouchableOpacity>
+
+    {/* 선물 상점 아이콘 & 글자 */}
+    <View style={styles.iconRow}>
+      <Image source={require("../assets/images/intro_gift.png")} style={styles.iconImage} />
+      <View>
+        <Svg height="80" width="120">
+          <SvgText
+            x="0"
+            y="26"
+            fontSize="30"
+            fontFamily="cookieB"
+            stroke="#fff"
+            strokeWidth="4"
+          >
+            선물 상점
+          </SvgText>
+          <SvgText
+            x="0"
+            y="26"
+            fontSize="30"
+            fontFamily="cookieB"
+            fill="#EF6868"
+          >
+            선물 상점
+          </SvgText>
+        </Svg>
+        <Text style={styles.pointText}>내 포인트 : 20 P</Text>
+      </View>
       </View>
 
-      
-      
+      <View style={styles.boxWrapper}>
+      {/* 폭죽 배경 */}
+      <Image
+        source={require("../assets/images/gift-deco.png")}
+        style={styles.decoImage}
+      />
 
-      
-  <View style={styles.boxWrapper}>
-  {/* 폭죽 배경 */}
-  <Image
-    source={require("../assets/images/gift-deco.png")}
-    style={styles.decoImage}
-  />
-
-  <Text style={styles.resultText}>{resultText}</Text>
-  {/* 선택한 상자 */}
-  <Image source={boxImage} style={styles.boxImage} />
-</View>
+      <Text style={styles.resultText}>{resultText}</Text>
+      {/* 선택한 상자 */}
+      <Image source={boxImage} style={styles.boxImage} />
+      </View>
 
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  bg: { flex: 1, alignItems: "center" },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  overlay: {
+    flex: 1,
+  },
+  backArrow: {
+    width: 80,
+    height: 48,
+  },
+  backButton: {
+    position: "absolute",
+    top: 66,
+    left: 24,
+    width: 54,
+    height: 54,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
   iconRow: {
-    marginTop: 64,
+    position: "absolute",
+    top: "10%",
+    left: 0,
+    right: 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    zIndex: 5,
   },
   iconImage: {
     width: 120,
     height: 120,
     resizeMode: "contain",
-    marginRight: 8,
+    marginBottom: 8,
   },
   pointText: {
     fontSize: 20,
     fontFamily: "cookieB",
     color: "#fff",
     textAlign: "center",
-    marginTop: -10,
+    marginTop: -38,
   },
   boxWrapper: {
-  marginTop: 80,
-  alignItems: "center",
-  justifyContent: "center",
+    top: -360,
+    marginTop: 80,
+    alignItems: "center",
+    justifyContent: "center",
 },
 
 decoImage: {

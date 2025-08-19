@@ -128,10 +128,10 @@ export default function GiftShopScreen() {
               width: "100%",
               minHeight: 170,
               alignItems: "center",  
-      marginLeft: "auto",    
-      marginRight: "auto", 
-               justifyContent: "center",
-        
+              marginLeft: "auto",    
+              marginRight: "auto", 
+              justifyContent: "center",
+              marginTop: -4,
             }}
             resizeMode="stretch"
             imageStyle={styles.boardImage}
@@ -229,19 +229,22 @@ const styles = StyleSheet.create({
     bottom: 24,
   },
   dashedBox: {
-    borderWidth: 5,
-    borderStyle: "dashed",
-    borderColor: "#6B4D33",
+    top: 10,
+    borderWidth: 10,
+    borderStyle: "solid",
+    borderColor: "#7C4E4E",
     borderRadius: 16,
     paddingVertical: 12,
     paddingHorizontal: 12,
-    backgroundColor: "transparent",
+    backgroundColor: "#D2EBF7",
   },
   gridRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 1,
-    marginBottom: 1,
+    gap: -2,
+    marginBottom: 9,
+    marginTop: -6,
+    padding: 8,
   },
   card: {
     width: "37%",

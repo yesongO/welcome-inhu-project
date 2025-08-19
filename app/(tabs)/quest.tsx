@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     questItem: {
         flexDirection: "row",
         alignItems: "center",
+        top: 30,
         marginBottom: 25,
         paddingBottom: 15,
         borderBottomWidth: 2,
