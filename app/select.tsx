@@ -4,7 +4,7 @@
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
 // signup API 임포트
@@ -26,12 +26,18 @@ export default function SelectScreen() {
 
     const handleGenderSelect = async (selectedGender: string) => {
         setGender(selectedGender);
+    }
 
+    const handleSignup = async () => {
         try {
+            if (!gender) {
+                Alert.alert("성별을 선택해주세요.");
+                return;
+            }
             const res = await signup(
                 studentId, 
                 password, 
-                selectedGender, 
+                gender, 
                 department, 
                 nickname
             );
@@ -88,7 +94,7 @@ export default function SelectScreen() {
                                 style={styles.genderImage}
                                 resizeMode="contain"
                             />
-                            <Text style={styles.genderText}>남성</Text>
+                            <Text style={[styles.genderText, gender === "male" && { color: "#fff" }]}>남성</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -103,10 +109,13 @@ export default function SelectScreen() {
                                 style={styles.genderImage}
                                 resizeMode="contain"
                             />
-                            <Text style={styles.genderText}>여성</Text>
+                            <Text style={[styles.genderText, gender === "female" && { color: "#fff" }]}>여성</Text>
                         </TouchableOpacity>
-                        </View>
                     </View>
+                </View>
+                <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+                    <Text style={styles.signupText}>가입하기</Text>
+                </TouchableOpacity>
             </View>
         </ImageBackground>
     );
@@ -123,8 +132,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 20,
         marginTop: -90,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
     },
     titleImage: {
         width: 240,
@@ -135,7 +143,7 @@ const styles = StyleSheet.create({
     genderRow: {
         flexDirection: "row",
         justifyContent: "center",
-        gap: 20, // RN 0.71 이상
+        gap: 20,
     },
     genderBox: {
         alignItems: "center",
@@ -147,12 +155,13 @@ const styles = StyleSheet.create({
     genderImage: {
         width: 120,
         height: 120,
-        marginBottom: 4,
+        marginBottom: 2,
+        marginTop: -10
     },
     genderText: {
         fontFamily: "pixel",
         fontSize: 30,
-        color: "#f4f4f4",
+        color: "#000",
     },
     input: {
         width: "100%",
@@ -164,26 +173,58 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontFamily: "pixel",
         fontSize: 30,
+        backgroundColor: "rgba(0, 0, 0, 0.3)",
+        zIndex: 10, // 최상단으로 올림
     },
     idContainer: {
         width: "100%",
-        marginBottom: -60
+        marginBottom: -74
     },
     pwContainer: {
         width: "100%",
-        marginBottom: -60
+        marginBottom: -74
     },
     departmentContainer: {
         width: "100%",
-        marginBottom: -60
+        marginBottom: -74
     },
     nicknameContainer: {
         width: "100%",
-        marginBottom: -60
+        marginBottom: -74
     },
     genderContainer: {
         width: "100%",
         marginBottom: -60,
         marginTop: 10,
+    },
+    signupButton: {
+        backgroundColor: "#567778",
+        padding: 10,
+        paddingHorizontal: 14,
+        borderRadius: 10,
+        marginTop: 80,
+        borderWidth: 2,
+        borderColor: "#FFFFFF",
+    },
+    signupText: {
+        fontFamily: "pixel",
+        fontSize: 26,
+        color: "#fff",
+    },
+    button: {
+        flex: 1,
+        backgroundColor: "#567778",
+        paddingVertical: 6,
+        borderRadius: 8,
+        marginHorizontal: 2,
+        borderWidth: 2,
+        borderColor: "#FFFFFF",
+    },
+    buttonText: {
+        color: "#fff",
+        fontFamily: "supermagic",
+        fontSize: 22,
+        textAlign: "center",
+        fontWeight: "bold",
     },
 });
