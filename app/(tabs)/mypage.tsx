@@ -86,7 +86,7 @@ export default function MyPageScreen() {
 
                 {/* 오른쪽 하단 내 교환권 F0AD04 */}
                 <TouchableOpacity style={[styles.iconButton, { top: "68%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
-                    <Image source={require("../../assets/images/intro_ticket.png")} style={styles.iconImage} />
+                    <Image source={require("../../assets/images/intro_ticket.png")} style={[styles.iconImage, { top: 14 }]} />
                     <Svg height="80" width="120">
                         <SvgText
                             x="0"
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: "130%",
+        marginBottom: "140%",
         borderRadius: 10,
         paddingVertical: 26,
         paddingHorizontal: 24,
@@ -140,16 +140,17 @@ const styles = StyleSheet.create({
     },
     profileBg: {
         position: "absolute",
-        top: -15,
-        left: -15,
-        width: 100,
-        height: 100,
+        top: -20,
+        left: -30,
+        width: 126,
+        height: 126,
     },
     profileImage: {
-        width: 70,
-        height: 70,
-        marginTop: -2,
-        marginRight: 40,
+        width: 88,
+        height: 88,
+        left: -10,
+        marginTop: -4,
+        marginRight: 20,
     },
     profileText: {
         justifyContent: "center",
@@ -157,20 +158,20 @@ const styles = StyleSheet.create({
     },
 
     department: {
-        fontSize: 16,
+        fontSize: 18,
         fontFamily: "cookieB",
         fontWeight: "bold",
         color: "#132836",
         marginBottom: 2,
     },
     name: {
-        fontSize: 22,
+        fontSize: 30,
         fontFamily: "cookieB",
         color: "#132836",
-        marginBottom: 2,
+        marginBottom: 4,
     },
     points: {
-        fontSize: 16,
+        fontSize: 18,
         fontFamily: "cookieB",
         color: "#132836",
         fontWeight: "bold",
@@ -181,8 +182,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     iconImage: {
-        width: 140,
-        height: 140,
+        width: 150,
+        height: 150,
         resizeMode: "contain",
         marginBottom: 8,
     },

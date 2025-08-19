@@ -59,7 +59,7 @@ export default function GiftShopScreen() {
         accessibilityRole="button"
         accessibilityLabel="뒤로가기"
       >
-        <Text style={styles.backText}>←</Text>
+        <Image source={require("../assets/images/back_arrow.png")} style={styles.backArrow} />
       </TouchableOpacity>
 
       {/* 선물 상점 아이콘 & 글자 */}
@@ -184,27 +184,19 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
   },
+  backArrow: {
+    width: 80,
+    height: 48,
+  },
   backButton: {
     position: "absolute",
-    top: 60,
-    left: 18,
-    padding: 12,
+    top: 66,
+    left: 24,
     width: 54,
     height: 54,
-    backgroundColor: "rgba(255,255,255,0.7)",
-    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 3,
-    borderColor: "#000",
     zIndex: 10,
-  },
-  backText: {
-    fontSize: 30,
-    fontFamily: "cookieB",
-    fontWeight: "bold",
-    color: "#000",
-    marginTop: -8,
   },
   iconRow: {
     position: "absolute",

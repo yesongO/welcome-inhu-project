@@ -96,10 +96,11 @@ const styles = StyleSheet.create({
         paddingVertical: 350,
     },
     message: { 
-        padding: 10, 
+        padding: 12, 
         borderRadius: 10, 
         marginVertical: 5, 
-        maxWidth: "100%" },
+        maxWidth: "100%" 
+    },
     user: { 
         backgroundColor: "#DCF8C6", 
         alignSelf: "flex-end" 
@@ -109,7 +110,8 @@ const styles = StyleSheet.create({
         alignSelf: "flex-start" 
     },
     messageText: { 
-        fontSize: 16 
+        fontSize: 16,
+        fontFamily: "pixel",
     },
     inputContainer: { 
         flexDirection: "row", 
@@ -123,17 +125,19 @@ const styles = StyleSheet.create({
         borderColor: "#ccc", 
         borderRadius: 20, 
         backgroundColor: "#fff",
-        paddingHorizontal: 15,
-        paddingVertical: 10,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
+        fontFamily: "pixel",
     },
     sendButton: { 
         backgroundColor: "#4CAF50", 
-        borderRadius: 20, 
-        padding: 10, 
+        borderRadius: 30, 
+        padding: 12, 
         marginLeft: 5 
     },
     sendText: { 
-        color: "#fff", 
-        fontWeight: "bold"
+        color: "#fff",
+        fontWeight: "bold",
+        fontFamily: "pixel",
     },
 });

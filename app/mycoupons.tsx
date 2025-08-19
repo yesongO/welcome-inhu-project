@@ -2,7 +2,7 @@
 // 내 쿠폰 화면
 
 import { useRouter } from "expo-router";
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
 export default function GiftShopScreen() {
@@ -12,10 +12,15 @@ export default function GiftShopScreen() {
         <ImageBackground source={require("../assets/images/sky_background.png")} style={styles.background}>
             <View style={styles.overlay}></View>
 
-                {/* 왼쪽 상단 뒤로가기 버튼 */}
-                <TouchableOpacity style={styles.backButton} onPress={() => router.push("/mypage")}>
-                    <Text style={styles.backText}>←</Text>
-                </TouchableOpacity>
+        {/* 왼쪽 상단 뒤로가기 버튼 */}
+        <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.push("/mypage")}
+            accessibilityRole="button"
+            accessibilityLabel="뒤로가기"
+        >
+            <Image source={require("../assets/images/back_arrow.png")} style={styles.backArrow} />
+        </TouchableOpacity>
 
                 {/* 식당 도감 아이콘 & 글자 */}
                 <View style={styles.iconRow}>
@@ -58,26 +63,19 @@ const styles = StyleSheet.create({
     overlay: {
         flex: 1,
     },
+    backArrow: {
+        width: 80,
+        height: 48,
+    },
     backButton: {
         position: "absolute",
-        top: 60,
-        left: 18,
-        padding: 12,
+        top: 66,
+        left: 24,
         width: 54,
         height: 54,
-        backgroundColor: "rgba(255,255,255,0.7)",
-        borderRadius: 50,
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 3,
-        borderColor: "#000",
-    },
-    backText: {
-        fontSize: 30,
-        fontFamily: "cookieB",
-        fontWeight: "bold",
-        color: "#000",
-        marginTop: -8,
+        zIndex: 10,
     },
     iconRow: {
         position: "absolute",

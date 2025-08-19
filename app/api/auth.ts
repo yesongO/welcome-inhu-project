@@ -11,7 +11,7 @@ export const signup = async (
 ) => {
     try {
         const res = await axios.post(
-            `${BASE_URL}/signup/`, 
+            `${BASE_URL}/users/signup/`, 
             { student_num, password, gender, department, nickname },
             { headers: { "Content-Type": "application/json" }} 
         );

@@ -1,7 +1,7 @@
 // 상단 바 컴포넌트
 // import TopBar from "../../components/TopBar";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
@@ -95,10 +95,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     bookIcon: {
-        width: 76,
-        height: 76,
+        width: 80,
+        height: 80,
         resizeMode: "contain",
         marginTop: 8,
+        marginLeft: -24,
     },
     modalOverlay: {
         flex: 1,

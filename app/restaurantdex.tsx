@@ -2,7 +2,7 @@
 // 식당 도감 화면
 
 import { useRouter } from "expo-router";
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
+import { Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
 type Item = {
@@ -48,8 +48,13 @@ export default function GiftShopScreen() {
       <View style={styles.overlay} />
 
       {/* 왼쪽 상단 뒤로가기 버튼 */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.push("/mypage")}>
-        <Text style={styles.backText}>←</Text>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => router.push("/mypage")}
+        accessibilityRole="button"
+        accessibilityLabel="뒤로가기"
+      >
+        <Image source={require("../assets/images/back_arrow.png")} style={styles.backArrow} />
       </TouchableOpacity>
 
       {/* 식당 도감 아이콘 & 글자 */}
@@ -85,16 +90,15 @@ export default function GiftShopScreen() {
       <View style={styles.circleGrid}>
         {grouped.map((row: Item[], rowIndex: number) => (
           <View
-  key={rowIndex}
-  style={[
-    styles.rowBase,
-    { width: ROW_WIDTH, marginBottom: 18 },
-    row.length === 2 && { paddingHorizontal: (CIRCLE + GAP) / 2 },
+            key={rowIndex}
+            style={[
+            styles.rowBase,
+            { width: ROW_WIDTH, marginBottom: 10, marginTop: 4 },
+              row.length === 2 && { paddingHorizontal: (CIRCLE + GAP) / 2 },
 
     rowIndex === 2 && { marginLeft: 30},
     rowIndex === 3 && { marginLeft: 20},
- rowIndex === 4 && { marginLeft: -20},
-    
+    rowIndex === 4 && { marginLeft: -20},
   ]}
 >
             {row.map((item, index) => (
@@ -153,31 +157,23 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
   },
+  backArrow: {
+    width: 80,
+    height: 48,
+  },
   backButton: {
     position: "absolute",
-    top: 60,
-    left: 18,
-    padding: 12,
+    top: 66,
+    left: 24,
     width: 54,
     height: 54,
-    backgroundColor: "rgba(255,255,255,0.7)",
-    borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 3,
-    borderColor: "#000",
-    zIndex: 2,
-  },
-  backText: {
-    fontSize: 30,
-    fontFamily: "cookieB",
-    fontWeight: "bold",
-    color: "#000",
-    marginTop: -8,
+    zIndex: 10,
   },
   iconRow: {
     position: "absolute",
-    top: "10%",
+    top: "11%",
     left: 0,
     right: 0,
     flexDirection: "row",
@@ -208,14 +204,13 @@ const styles = StyleSheet.create({
   },
   circle: {
     backgroundColor: "rgba(255,255,255,0.9)",
-  
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 6,
     shadowColor: "#000",        // 그림자 색상
-  shadowOffset: { width: 0, height: 4 }, // 가로/세로 번짐
-  shadowOpacity: 0.3,         // 불투명도 (0 ~ 1)
-  shadowRadius: 4,            // 퍼지는 정도
+    shadowOffset: { width: 0, height: 4 }, // 가로/세로 번짐
+    shadowOpacity: 0.3,         // 불투명도 (0 ~ 1)
+    shadowRadius: 4,            // 퍼지는 정도
   },
   circleLabel: {
     fontSize: 14,
@@ -224,12 +219,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   circleGrid: {
-    marginTop: -300,
+    marginTop: -290,
     marginLeft: 55,
-    marginBottom: 0,
+    marginBottom: 60,
   },
   rightImage: {
+    top: -126,
+    left: 10,
     marginLeft: 300,
-    marginTop:-30,
+    marginTop:-18,
   },
 });

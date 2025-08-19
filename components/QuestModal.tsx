@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         marginHorizontal: 10,
         marginRight: 20,
-        marginLeft: 20,
+        marginLeft: 22,
         marginTop: 10,
     },
     acceptBtn: { 

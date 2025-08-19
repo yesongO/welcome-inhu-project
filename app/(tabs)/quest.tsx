@@ -1,5 +1,4 @@
 import { useRouter } from "expo-router";
-import React from "react";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuestStore } from "../store/questStore";
 
@@ -91,17 +90,20 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 20,
+        padding: 40,
         justifyContent: 'center',
     },
     mainPanel: {
         flex: 1,
-        padding: 20,
+        padding: 14,
         minHeight: 500,
+        width: "116%",
+        marginLeft: -42,
     },
     questSection: {
         flex: 1,
         marginTop: 250, // 책 이미지 아래에 적절하게 배치
+        marginLeft: 24,
     },
     questItem: {
         flexDirection: "row",
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
-        borderWidth: 4, // 테두리를 더 두껍게
+        borderWidth: 3, // 테두리를 더 두껍게
         borderColor: "#FFFFFF",
         minWidth: 100,
         alignItems: "center",
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
-        borderWidth: 4, // 테두리를 더 두껍게
+        borderWidth: 3, // 테두리를 더 두껍게
         borderColor: "#FFFFFF",
         minWidth: 100,
         alignItems: "center",
