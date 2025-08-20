@@ -1,56 +1,38 @@
 // (tabs)/mypage.tsx
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
-// myInfo API 임포트
-// import { getUserInfo } from "../../app/api/myInfo";
+// myInfo.ts 임포트 ----------------------------------------
+import { getUserInfo } from "../../app/api/myInfo";
 
 export default function MyPageScreen() {
     const router = useRouter();
-    // const [myProfile, setMyProfile] = useState<any>(null);
+    const [myProfile, setMyProfile] = useState<any>(null);
 
-    // useEffect(() => {
-    //     const fetchProfile = async () => {
-    //         const token = await AsyncStorage.getItem("access_token");
-    //         if (!token) {
-    //             console.log("토큰 없음. 다시 로그인 필요");
-    //             return;
-    //         }
-    //         try {
-    //             const res = await getUserInfo(token);
-    //             if (!res) {
-    //                 console.log("내 정보 불러오기 실패");
-    //                 return;
-    //             }
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const user = await getUserInfo();
+            if (!user) {
+                return;
+            }
 
-    //             const user = res.user;
+            setMyProfile({
+                name: user.nickname,
+                department: user.department,
+                points: user.point,
+                gender: user.gender,
+            });
+        };
 
-    //             setMyProfile({
-    //                 name: user.nickname,
-    //                 department: user.department,
-    //                 points: user.points,
-    //             });
-    //         } catch (error) {
-    //             console.error("내 정보 불러오기 실패:", error);
-    //         }
-    //     };
+        fetchProfile();
+    }, []);
 
-    //     fetchProfile();
-    // }, []);
-
-    // if (!myProfile) {
-    //     return <Text>Loading...</Text>;
-    // }
-
-    // 임시 더미 데이터
-    const myProfile = {
-        name: "오예송",
-        department: "디자인테크놀로지학과",
-        points: 100,
-        image: require("../../assets/images/woman.png"),
-    };
-
+    if (!myProfile) {
+        return <Text>Loading...</Text>;
+    }
+//------------------------------------------------------
     return (
         <ImageBackground source={require("../../assets/images/sky_background.png")} style={styles.background}>
             <View style={styles.overlay}></View>

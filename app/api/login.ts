@@ -20,7 +20,7 @@ export const login = async (
 
         console.log("로그인 성공:", res.data);
 
-        const { access_token, refresh_token } = res.data;
+        const { access_token, refresh_token, user } = res.data;
 
         if (!access_token || !refresh_token) {
             throw new Error("로그인 실패: 토큰이 없습니다.");
@@ -28,8 +28,10 @@ export const login = async (
 
         await AsyncStorage.setItem("access_token", access_token);
         await AsyncStorage.setItem("refresh_token", refresh_token);
+        await AsyncStorage.setItem("user_id", user.id.toString());
 
         console.log("토큰 저장 완료");
+        console.log(res.data);
         
         return res.data;
         
