@@ -3,6 +3,9 @@ import { useRouter } from "expo-router";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
+// 식당 등록 조회 API 임포트 - 추후 삭제 예정
+
+
 export default function ExplainScreen() {
     const router = useRouter();
     const [fontsLoaded] = useFonts(customFonts);
@@ -29,6 +32,47 @@ export default function ExplainScreen() {
                     <Text style={styles.buttonText}>맡겨줘!!</Text>
                 </TouchableOpacity>
             </View>
+
+            {/* 추후 삭제 예정 ================================ */}
+            {/* <Button
+                title="가게 등록"
+                onPress={async () => {
+                    try {
+                    await registerPlace("레커훈스"); // 등록할 가게 이름
+                    alert("가게 등록 완료!");
+                    } catch (err) {
+                    alert("가게 등록 실패...");
+                    }
+                }}
+            />
+
+            <Button
+                title="전체 가게 조회"
+                onPress={async () => {
+                    try {
+                    const places = await getPlaces();
+                    console.log(places);
+                    alert(`가게 수: ${places.length}`);
+                    } catch (err) {
+                    alert("가게 조회 실패...");
+                    }
+                }}
+            />
+
+            <Button
+                title="퀘스트 생성"
+                onPress={async () => {
+                    try {
+                    await createQuest(6, 100, 
+                        "치킨 좋아하시죠! 제가 최근에 아주 바삭한 튀김옷을 연구하고 있는데 일손이 부족해서요. 바삭바삭한 튀김옷 연구, 와서 같이 해보실래요? 🍗"
+                    ); // 등록할 퀘스트 (가게id, 보상포인트, 퀘스트 설명)
+                    alert("퀘스트 생성 완료!");
+                    } catch (err) {
+                    alert("퀘스트 생성 실패...");
+                    }
+                }}
+            /> */}
+            {/* ================================ */}
         </ImageBackground>
     )
 }
