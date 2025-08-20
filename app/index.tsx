@@ -4,6 +4,9 @@ import { useState } from "react";
 import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
+// login API 임포트
+import { login } from "../app/api/login";
+
 export default function IntroScreen() {
     const router = useRouter();
     const [studentId, setStudentId] = useState("");
@@ -15,15 +18,22 @@ export default function IntroScreen() {
     }
 
     const handleSignup = () => {
-        // 백엔드 API 연동 예정
-        router.push("/select"); // select로 바꿔야함
+        router.push("/select"); 
     }
-
-    const handleEnter = () => {
-        // 백엔드 API 연동 예정
-        console.log("학번", studentId, "비번", password);
-        router.push("/chat");
-    }
+    
+    const handleEnter = async () => {
+        try {
+            const res = await login(
+                studentId, 
+                password, 
+            );
+            // 성공하면 설명 페이지로 이동
+            console.log("로그인 성공:", res);
+            router.push("/explain");
+        } catch (error) {
+            console.error("로그인 오류:", error);
+        }
+    };
 
     return (
         <ImageBackground source={require("../assets/images/forest_background1.png")} style={styles.background}>
