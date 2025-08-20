@@ -1,56 +1,9 @@
 
-// type TabsLayoutProps = {
-//   children: React.ReactNode;
-// };
-
-// export default function TabsLayout({ children }: TabsLayoutProps) {
-//   return (
-//     <Tabs
-//     screenOptions={{
-//       tabBarActiveTintColor: "#4CAF50",
-//       tabBarInactiveTintColor: "#999",
-//       tabBarStyle: {
-//         backgroundColor: "#fff",
-//         borderTopWidth: 1,
-//         borderTopColor: "#eee",
-//       },
-//       headerShown: false,
-//     }}
-//   >
-//     <Tabs.Screen
-//       name="main"
-//       options={{
-//         title: "메인",
-//         tabBarIcon: ({ color, size }) => (
-//           <Ionicons name="home" size={size} color={color} />
-//         ),
-//       }}
-//     />
-//     <Tabs.Screen
-//       name="quest"
-//       options={{
-//         title: "퀘스트",
-//         tabBarIcon: ({ color, size }) => (
-//           <Ionicons name="flag" size={size} color={color} />
-//         ),
-//       }}
-//     />
-//     <Tabs.Screen
-//       name="mypage"
-//       options={{
-//         title: "마이페이지",
-//         tabBarIcon: ({ color, size }) => (
-//           <Ionicons name="person" size={size} color={color} />
-//         ),
-//       }}
-//     />
-//   </Tabs>
-//   );
-// }
-
 
 import { Stack, useRouter, useSegments } from "expo-router";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function Layout() {
   const router = useRouter();
@@ -60,6 +13,8 @@ export default function Layout() {
   return (
     <View style={{ flex: 1}}>
       <Stack screenOptions={{ headerShown: false, animation: "none" }} />
+
+      <SafeAreaView style={styles.tabBarContainer}>
       <View style={styles.tabBar}>
 
         <TouchableOpacity onPress={() => router.push("/main")}>
@@ -93,6 +48,7 @@ export default function Layout() {
         </TouchableOpacity>
 
       </View>
+      </SafeAreaView>
 
     </View>
   );
@@ -100,6 +56,10 @@ export default function Layout() {
 
 
 const styles = StyleSheet.create({
+  tabBarContainer: {
+    width: "100%",
+    top: 40,
+  },
   tabBar: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -107,8 +67,8 @@ const styles = StyleSheet.create({
     height: 0.1,
   },
   icon: {
-    width: 86,
-    height: 86,
+    width: SCREEN_WIDTH / 5,
+    height: SCREEN_WIDTH / 5,
     marginTop: -26,
     marginBottom: 100,
   },

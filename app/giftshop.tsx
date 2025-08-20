@@ -138,12 +138,13 @@ export default function GiftShopScreen() {
           >
             <Text style={[styles.infoText, {textAlign: "center"}]}>
               20 포인트를 사용해 {"\n"}
-              랜덤선물을 뽑아보세요 !{"\n"}
-              얻을 수 있는 보상 (예시) {"\n"}
+              5가지의 랜덤선물을 뽑아보세요 !{"\n"}
               {"\n"}
-              • 포인트 10 {"\n"}
-              • 인덕이 키링 교환권 {"\n"}
-              • 학과별 스티커 {"\n"}
+              • 인후의숲 안뇽인덕 스티커 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 학과별 빅스티커 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 엽서 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 키링 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 인형 교환권 {"\n"}
             </Text>
           </ImageBackground>
         </View>
@@ -165,7 +166,8 @@ export default function GiftShopScreen() {
           />
           <View style={{ flex: 1 }}>
             <Text style={styles.premiumTitle}>
-                프리미엄 스페이스 교환권 {"\n"}
+                교내 프리미엄 {'\n'}
+                스페이스 교환권 {"\n"}
                 가격: 500 P
                 </Text>
             
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
      marginTop: 40,
   },
   premiumRow: {
-    marginTop: 14,
+    marginTop: -20,
     flexDirection: "row",
     alignItems: "center",
     padding: 12,

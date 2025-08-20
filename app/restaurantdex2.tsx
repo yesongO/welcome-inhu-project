@@ -24,11 +24,11 @@ function chunkArray(array: any[], chunkSizes: number[]) {
   return result;
 }
 
-
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const CIRCLE = 85;         
+const MAX_CIRCLE_PER_ROW = 3;
 const GAP = 14;            
-const H_PADDING = 24;      
+const H_PADDING = 24;    
+const CIRCLE = (SCREEN_WIDTH - H_PADDING * 5.2 - GAP * (MAX_CIRCLE_PER_ROW - 1)) / MAX_CIRCLE_PER_ROW;           
 // 최대 3개가 들어가는 줄 기준 너비(작은 화면에서 좌우 여백 고려)
 const ROW_WIDTH = Math.min(SCREEN_WIDTH - H_PADDING * 2, CIRCLE * 3 + GAP * 2);
 
@@ -37,7 +37,7 @@ export default function GiftShopScreen() {
 
   // 임시데이터(테스트용) — 나중에 API 연결 후 수정
   const items: Item[] = [
-    { name: "미식당" },
+    {},
     {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
   ];
 
@@ -219,15 +219,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   circleGrid: {
-    marginTop: -290,
     marginLeft: 55,
-    marginBottom: 60,
+    marginBottom: 10,
   },
   rightImage: {
-    top: -126,
-    right: 346,
-    marginLeft: 300,
-    marginTop:-18,
+    top: -92,
+    left: "-80%",
+    marginLeft: "-78%",
     transform: [{ rotate: "180deg" }],
   },
 });

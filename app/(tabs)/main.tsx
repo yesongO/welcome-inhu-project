@@ -99,7 +99,7 @@ export default function MainScreen() {
 
             {/* 왼쪽 상단 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { top: "28%", left: "10%" }]}
+            style={[styles.character, { top: "26%", left: "10%" }]}
             onPress={() => openQuestModal(0)}
             >
             <Animated.Image 
@@ -114,7 +114,7 @@ export default function MainScreen() {
 
             {/* 오른쪽 중간 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { top: "42%", left: "55%" }]}
+            style={[styles.character, { top: "41.2%", left: "55%" }]}
             onPress={() => openQuestModal(1)}
             >
             <Animated.Image 

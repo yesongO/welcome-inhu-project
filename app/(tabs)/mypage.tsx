@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
 
-// myInfo.ts 임포트 ----------------------------------------
+// myInfo API 임포트 ----------------------------------------
 import { getUserInfo } from "../../app/api/myInfo";
 
 export default function MyPageScreen() {
@@ -52,7 +52,7 @@ export default function MyPageScreen() {
             </View>
 
                 {/* 오른쪽 상단 선물 상점 */}
-                <TouchableOpacity style={[styles.iconButton, { top: "38%", right: "12%" }]} onPress={() => router.push("/giftshop")}>
+                <TouchableOpacity style={[styles.iconButton, { top: "34%", right: "12%" }]} onPress={() => router.push("/giftshop")}>
                     <Image source={require("../../assets/images/intro_gift.png")} style={styles.iconImage} />
                     <Svg height="80" width="120">
                         <SvgText
@@ -78,7 +78,7 @@ export default function MyPageScreen() {
                 </TouchableOpacity>
 
                 {/* 왼쪽 중단 식당 도감 1D96CE */}
-                <TouchableOpacity style={[styles.iconButton, { top: "50%", left: "10%" }]} onPress={() => router.push("/restaurantdex")}>
+                <TouchableOpacity style={[styles.iconButton, { top: "44%", left: "8%" }]} onPress={() => router.push("/restaurantdex")}>
                     <Image source={require("../../assets/images/intro_dex.png")} style={styles.iconImage} />
                     <Svg height="80" width="120">
                         <SvgText
@@ -104,7 +104,7 @@ export default function MyPageScreen() {
                 </TouchableOpacity>
 
                 {/* 오른쪽 하단 내 교환권 F0AD04 */}
-                <TouchableOpacity style={[styles.iconButton, { top: "62%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
+                <TouchableOpacity style={[styles.iconButton, { top: "60%", right: "12%" }]} onPress={() => router.push("/mycoupons")}>
                     <Image source={require("../../assets/images/intro_ticket.png")} style={[styles.iconImage, { top: 14 }]} />
                     <Svg height="80" width="120">
                         <SvgText
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     profileContainer: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: "150%",
+        marginBottom: "148%",
         borderRadius: 10,
         paddingVertical: 26,
         paddingHorizontal: 24,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         resizeMode: "contain",
-        marginBottom: 8,
+        marginBottom: 4,
     },
     iconText: {
         fontSize: 28,
