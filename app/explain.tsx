@@ -20,7 +20,7 @@ export default function ExplainScreen() {
                     오늘도 인후의 숲에 와줘서 고마워{'\n'}
                     {'\n'}
                     인후의 숲에 갇혀 있는 {'\n'}
-                    인후 식당 사장님들의{'\n'}
+                    인하대 후문 식당 사장님들의{'\n'}
                     부탁을 들어줘!{'\n'}
                 </Text>
             </View>

@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     description: { 
-        fontSize: 16,
+        fontSize: 15,
         fontFamily: "pixel",
         color: "#5D3838",
         marginVertical: 20,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 24,
         borderRadius: 50,
-        marginTop: 10,
+        marginTop: 0,
         marginLeft: 78,
         borderWidth: 3,
         borderColor: "#FFFFFF", 
