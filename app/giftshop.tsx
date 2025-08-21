@@ -1,28 +1,27 @@
 // giftshop.tsx
 // 선물 상점 화면
 
-import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
+  Alert,
   Image,
   ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  Alert,
+  View
 } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native";
 
-import { usePoint } from "./api/point";
+// 포인트 차감을 위한 point API 임포트 ----------------------------------------
+import { usePointMinus } from "./api/pointMinus";
+// 현재 내 포인트를 가져오기 위한 myInfo API 임포트 ------------------------------
+import { getUserInfo } from "./api/myInfo";
 
 // ===== 설정값 =====
-const DEFAULT_POINTS = 100;     // 앱 최초 실행 시 로컬 기본 포인트
-const PICK_COST = 20;           // 일반 상자 가격
-const PREMIUM_COST = 500;       // 프리미엄 가격
-const DEV_TOPUP = 100;          // 길게 눌러 충전되는 포인트 (개발자용)
+const PICK_COST = -100;           // 일반 상자 가격
+const PREMIUM_COST = 500;       // 프리미엄 상자 가격
 
 // 임시 보상 데이터 나중에 수정할거
 const rewards = [
@@ -31,63 +30,61 @@ const rewards = [
   { id: "r3", label: "인덕이 키링 교환권", kind: "coupon" as const },
   { id: "r4", label: "학과별 스티커", kind: "item" as const },
 ];
+
 const pickRandomReward = () => {
   const idx = Math.floor(Math.random() * rewards.length);
   return rewards[idx];
 };
 
-async function getLocalPoints() {
-  const raw = await AsyncStorage.getItem("points");
-  return parseInt(raw ?? "0", 10) || 0;
-}
-async function setLocalPoints(v: number) {
-  await AsyncStorage.setItem("points", String(v));
-}
-
 export default function GiftShopScreen() {
   const router = useRouter();
-  const [points, setPoints] = useState(0);
+  const [points, setPoints] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // 앱 최초 진입 시 기본 포인트 세팅
+  // 앱 최초 진입 시 기본 나의 포인트 세팅
   useEffect(() => {
-    (async () => {
-      const cur = await getLocalPoints();
-      if (cur <= 0) {
-        await setLocalPoints(DEFAULT_POINTS);
-        setPoints(DEFAULT_POINTS);
-      } else {
-        setPoints(cur);
+    const fetchProfile = async () => {
+      const user = await getUserInfo();
+      if (user) {
+        setPoints(user.point);
       }
-    })();
+    };
+    fetchProfile();
   }, []);
 
-  // 포인트 최신화(다른 화면 다녀오고 돌아왔을 때 대비)
-  const refreshPoints = useCallback(async () => {
-    const cur = await getLocalPoints();
-    setPoints(cur);
-  }, []);
+  // 핸들러 함수 추가
+  const handlePickBox = async () => {
+    if (isLoading) return;
+    if (points < PICK_COST) {
+      Alert.alert("포인트 부족", "포인트가 부족합니다. 충전 후 이용해 주세요.");
+      return;
+    }
 
-  useFocusEffect(
-    useCallback(() => {
-      let alive = true;
-      (async () => {
-        const cur = await getLocalPoints();
-        if (alive) setPoints(cur);
-      })();
-      return () => {
-        alive = false;
-      };
-    }, [])
-  );
+    setIsLoading(true);
+    
+    try {
+      const result = await usePointMinus();
 
-  // 개발자용: 길게 눌러 포인트 충전
-  const devTopupPoints = useCallback(async () => {
-    const cur = await getLocalPoints();
-    const next = cur + DEV_TOPUP;
-    await setLocalPoints(next);
-    setPoints(next);
-    Alert.alert("개발자 충전", `+${DEV_TOPUP}P 충전됨\n현재: ${next}P`);
-  }, []);
+      if (result && result.points_dedacted) {
+        setPoints(prevPoints => prevPoints - result.points_dedacted);
+
+        const reward = pickRandomReward();
+        Alert.alert(
+          "뽑기 성공!", 
+          `축하해! ${reward.label}을 획득했어!`,
+          [{text: "확인"}]
+        );
+
+      } else {
+        Alert.alert("뽑기 실패", "뽑기에 실패했습니다. 다시 시도해 주세요.");
+      }
+    } catch (error) {
+      console.error("뽑기 오류:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   const items = [
     { id: "g1", name: "box 1", premium: false, image: require("../assets/images/boxes_1.png") },
@@ -101,72 +98,6 @@ export default function GiftShopScreen() {
   const regularItems = items.filter(i => !i.premium).slice(0, 6);
   const topRow = regularItems.slice(0, 2);     // 2개
   const bottomRow = regularItems.slice(2, 5);  // 3개
-
-  const tryDeductPoints = useCallback(async (cost: number) => {
-    const current = await getLocalPoints();
-    if (current < cost) {
-      Alert.alert("포인트 부족", "포인트가 부족합니다. 충전 후 이용해 주세요.");
-      return false;
-    }
-
-    // 1) API 시도
-    try {
-      const apiRes = await usePoint(cost); // 서버 차감 시도
-      if (apiRes) {
-        const newLocal = Math.max(0, current - cost);
-        await setLocalPoints(newLocal);
-        setPoints(newLocal);
-        return true;
-      }
-      // apiRes가 falsy면 아래 로컬 차감으로 폴백
-    } catch (e) {
-      // 서버 실패 → 로컬 폴백
-    }
-
-    // 2) 서버 안될 때 로컬 폴백
-    const newLocal = current - cost;
-    await setLocalPoints(newLocal);
-    setPoints(newLocal);
-    return true;
-  }, []);
-
-  // 일반 박스 클릭
-  const handlePick = useCallback(async (boxId: string) => {
-    const ok = await tryDeductPoints(PICK_COST);
-    if (!ok) return;
-
-    const reward = pickRandomReward();
-    // 포인트 보상(예: 포인트 10/30)일 경우 로컬 포인트 즉시 가산
-    if (reward.kind === "point" && (reward as any).amount) {
-      const after = (await getLocalPoints()) + (reward as any).amount;
-      await setLocalPoints(after);
-      setPoints(after);
-    }
-
-    router.push({
-      pathname: "/obtain-gift",
-      params: {
-        boxId,
-        rewardLabel: reward.label,
-        kind: (reward as any).kind,
-        amount: (reward as any).kind === "point" ? String((reward as any).amount) : "",
-      },
-    });
-  }, [tryDeductPoints, router]);
-
-  // 프리미엄 상품 클릭
-  const handlePremium = useCallback(async () => {
-    const ok = await tryDeductPoints(PREMIUM_COST);
-    if (!ok) return;
-
-    router.push({
-      pathname: "/obtain-gift",
-      params: {
-        rewardLabel: "프리미엄 스페이스 출입증",
-        kind: "premium",
-      },
-    });
-  }, [tryDeductPoints, router]);
 
   return (
     <ImageBackground
@@ -211,17 +142,7 @@ export default function GiftShopScreen() {
               선물 상점
             </SvgText>
           </Svg>
-
-          {/* ⬇️ 길게 누르면 포인트 충전 (개발자용) */}
-          <TouchableOpacity
-            onLongPress={devTopupPoints}
-            delayLongPress={450}
-            accessibilityRole="button"
-            accessibilityLabel="포인트 충전(개발자)"
-            style={{ alignSelf: "center", paddingVertical: 6, paddingHorizontal: 12 }}
-          >
-            <Text style={styles.pointText}>내 포인트 : {points} P</Text>
-          </TouchableOpacity>
+          <Text style={styles.pointText}>내 포인트 : {points} P</Text>
         </View>
       </View>
 
@@ -234,7 +155,8 @@ export default function GiftShopScreen() {
               <TouchableOpacity
                 key={item.id}
                 style={styles.card}
-                onPress={() => handlePick(item.id)}
+                onPress={handlePickBox}
+                disabled={isLoading}
               >
                 <Image source={item.image} style={styles.cardImage} />
               </TouchableOpacity>
@@ -246,7 +168,8 @@ export default function GiftShopScreen() {
               <TouchableOpacity
                 key={item.id}
                 style={styles.card}
-                onPress={() => handlePick(item.id)}
+                onPress={handlePickBox}
+                disabled={isLoading}
               >
                 <Image source={item.image} style={styles.cardImage} />
               </TouchableOpacity>
@@ -285,7 +208,7 @@ export default function GiftShopScreen() {
         </View>
 
         {/* 프리미엄 상품 */}
-        <TouchableOpacity style={styles.premiumRow} onPress={handlePremium}>
+        <TouchableOpacity style={styles.premiumRow}>
           <Image
             source={require("../assets/images/special_gift_1.png")}
             style={styles.premiumImage}
@@ -359,9 +282,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: "#6B4D33",
-     fontFamily: "cookieB",
-     marginBottom: 20,
-     marginTop: 40,
+    fontFamily: "cookieB",
+    marginBottom: 20,
+    marginTop: 40,
   },
   premiumRow: { marginTop: 14, flexDirection: "row", alignItems: "center", padding: 12 },
   premiumImage: { width: 130, height: 130, resizeMode: "contain", marginRight: 8 },
