@@ -1,9 +1,12 @@
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Image, ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Animated, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import QuestModal from "../../components/QuestModal";
 import TopBar from "../../components/TopBar";
 import { Quest, useQuestStore } from "../store/questStore";
+
+// myInfo API 임포트 
+import { getUserInfo } from "../../app/api/myInfo";
 
 // export interface Quest {
 //     id: string;
@@ -15,8 +18,26 @@ import { Quest, useQuestStore } from "../store/questStore";
 
 export default function MainScreen() {
     const router = useRouter();
-    const userPoints = 100; // 나중에 API로 가져올 나의 포인트
     const { acceptQuest } = useQuestStore();
+    const [userPoints, setUserPoints] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchUserPoints = async () => {
+            try {
+                const user = await getUserInfo();
+                if (user) {
+                    setUserPoints(user.point);
+                }
+            } catch (error) {
+                console.error("포인트 가져오기 실패:", error);
+            }
+        };
+        fetchUserPoints();
+    }, []);
+
+    if (!userPoints === null) {
+        return <Text>Loading...</Text>;
+    }
 
 
     // 전구 반짝이는 애니메이션 관련
@@ -55,7 +76,7 @@ export default function MainScreen() {
                 image: require("../../assets/images/excharacter_1.png"),
                 title: "식당이름",
                 reward: 100,
-                description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다. 식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
+                description: "저기 부탁 하나만 해도 될까? 내가 만든 떡볶이가 펄펄 끓어야 하는데 불이 약해서 맛있게 끓지를 않아. 혹시 새 부탄가스 하나만 구해다줄 수 있어? 맛있는 떡볶이를 만들어줄게.",
             },
             {
                 id: "2",
@@ -95,11 +116,11 @@ export default function MainScreen() {
         <ImageBackground source={require("../../assets/images/forest_background2.png")} style={styles.background}>
             <View style={styles.overlay}></View>
 
-            <TopBar points={userPoints} />
+            <TopBar points={userPoints || 0} />
 
             {/* 왼쪽 상단 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { top: "28%", left: "10%" }]}
+            style={[styles.character, { top: "26%", left: "10%" }]}
             onPress={() => openQuestModal(0)}
             >
             <Animated.Image 
@@ -114,7 +135,7 @@ export default function MainScreen() {
 
             {/* 오른쪽 중간 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { top: "42%", left: "55%" }]}
+            style={[styles.character, { top: "41.2%", left: "55%" }]}
             onPress={() => openQuestModal(1)}
             >
             <Animated.Image 

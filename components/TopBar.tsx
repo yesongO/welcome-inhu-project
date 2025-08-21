@@ -33,24 +33,17 @@ export default function TopBar({ points = 0, onGuidePress }: TopBarProps) {
             </Svg>
 
             {/* 오른쪽: 설명서 */}
-            {/* <TouchableOpacity style={styles.guideButton} onPress={openGuideModal}>
-                <Text style={styles.guideText}>설명서</Text>
-                <Image
-                    source={require("../assets/images/explain_book.png")}
-                    style={styles.bookIcon}
-                />
-            </TouchableOpacity> */}
-            <Svg height="40" width="80">
+            {/* <Svg height="40" width="80">
                 <SvgText x="24" y="30" fontSize="20" fontFamily="cookieB" stroke="#30211A" strokeWidth="8">
                     설명서
                 </SvgText>
                 <SvgText x="24" y="30" fontSize="20" fontFamily="cookieB" fill="#EBE1CD">
                     설명서
                 </SvgText>
-            </Svg>
+            </Svg> */}
             <TouchableOpacity style={styles.guideButton} onPress={openGuideModal}>
                 <Image
-                    source={require("../assets/images/explain_book.png")}
+                    source={require("../assets/images/explain_group.png")}
                     style={styles.bookIcon}
                 />
             </TouchableOpacity>
@@ -95,8 +88,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     bookIcon: {
-        width: 80,
-        height: 80,
+        width: 130,
+        height: 130,
         resizeMode: "contain",
         marginTop: 8,
         marginLeft: -24,

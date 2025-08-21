@@ -1,6 +1,6 @@
 // app/api/login.ts
 // 입장하기에서 사용하는 로그인 API
-// 로그인 성공 시 토큰을 저장합니다. 
+// 로그인 성공 시 토큰과 user의 정보들을 저장합니다. 
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";

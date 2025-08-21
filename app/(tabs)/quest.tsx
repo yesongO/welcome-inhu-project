@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 40,
+        padding: 20,
         justifyContent: 'center',
     },
     mainPanel: {
@@ -98,12 +98,15 @@ const styles = StyleSheet.create({
         padding: 14,
         minHeight: 500,
         width: "116%",
-        marginLeft: -42,
+        marginLeft: -20,
+        alignSelf: "center",
     },
     questSection: {
+        width: "100%",
+        alignItems: "center",
         flex: 1,
         marginTop: 250, // 책 이미지 아래에 적절하게 배치
-        marginLeft: 24,
+        marginLeft: 10
     },
     questItem: {
         flexDirection: "row",
@@ -128,6 +131,7 @@ const styles = StyleSheet.create({
         height: 130,    // 컨테이너(80)보다 더 크게 → 아래쪽만 잘림
         resizeMode: 'contain',
         marginTop: 0,
+        marginLeft: 14,
     },
     questInfo: {
         flex: 1,
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
     viewQuestText: {
         color: "#fff",
         fontFamily: "pixel",
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: "bold",
         textAlign: 'center', // 텍스트 중앙 정렬
     },
@@ -187,7 +191,7 @@ const styles = StyleSheet.create({
     authenticateText: {
         color: "#fff",
         fontFamily: "pixel",
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: "bold",
         textAlign: 'center', // 텍스트 중앙 정렬
     },

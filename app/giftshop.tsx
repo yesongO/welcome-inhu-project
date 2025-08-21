@@ -270,14 +270,16 @@ export default function GiftShopScreen() {
             resizeMode="stretch"
             imageStyle={styles.boardImage}
           >
-            <Text style={[styles.infoText, { textAlign: "center" }]}>
-              {PICK_COST} 포인트를 사용해 {"\n"}
-              랜덤선물을 뽑아보세요 !{"\n"}
-              얻을 수 있는 보상 (예시) {"\n"}
+
+            <Text style={[styles.infoText, {textAlign: "center"}]}>
+              20 포인트를 사용해 {"\n"}
+              5가지의 랜덤선물을 뽑아보세요 !{"\n"}
               {"\n"}
-              • 포인트 10 {"\n"}
-              • 인덕이 키링 교환권 {"\n"}
-              • 학과별 스티커 {"\n"}
+              • 인후의숲 안뇽인덕 스티커 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 학과별 빅스티커 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 엽서 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 키링 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 인형 교환권 {"\n"}
             </Text>
           </ImageBackground>
         </View>
@@ -357,9 +359,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: "#6B4D33",
-    fontFamily: "cookieB",
-    marginBottom: 20,
-    marginTop: 40,
+     fontFamily: "cookieB",
+     marginBottom: 20,
+     marginTop: 40,
   },
   premiumRow: { marginTop: 14, flexDirection: "row", alignItems: "center", padding: 12 },
   premiumImage: { width: 130, height: 130, resizeMode: "contain", marginRight: 8 },
