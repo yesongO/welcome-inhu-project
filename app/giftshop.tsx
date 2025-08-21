@@ -61,7 +61,7 @@ export default function GiftShopScreen() {
     setIsLoading(true);
 
     try {
-      const result = await usePointAdd("영수증 인증 미션");
+      const result = await usePointAdd(1);
 
       if (result && result.points_added) {
         setPoints(prevPoints => prevPoints + result.points_added);

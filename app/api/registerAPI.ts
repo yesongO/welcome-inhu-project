@@ -82,3 +82,34 @@ export const createQuest = async (place: number, reward_points: number, descript
         throw err;
     }
 };
+
+
+// 교환권 생성 API
+type CouponPayload = Record<string, number>;
+
+export const createCoupons = async (payload: CouponPayload) => {
+    try {
+        const accessToken = await AsyncStorage.getItem("access_token");
+        if (!accessToken) {
+            console.log("토큰 없음. 로그인 필요");
+            return null;
+        }
+
+        const response = await axios.post(
+            `${BASE_URL}/rewards/`,
+            payload,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        console.log("교환권 생성 성공:", response.data);
+        return response.data;
+    } catch (err: any) {
+        console.error("교환권 생성 실패:", err.response?.data || err.message);
+        throw err;
+    }
+};

@@ -6,14 +6,14 @@ import axios from "axios";
 const BASE_URL = "https://inhu-forest.p-e.kr";
 
 // 퀘스트 완료로 포인트를 적립하는 API 함수
-export const usePointAdd = async (questName: string) => {
+export const usePointAdd = async (questId: number) => {
     try {
         const accessToken = await AsyncStorage.getItem("access_token");
         if (!accessToken) return null;
 
         const res = await axios.post(
             `${BASE_URL}/points/quest/complete/`,
-            { quest_name: questName }, // 요청 본문
+            { quest_id: questId }, // 요청 본문
             {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,

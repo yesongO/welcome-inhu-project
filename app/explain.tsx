@@ -1,11 +1,12 @@
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
-// 식당 등록 조회 API 임포트 - 추후 삭제 예정
+// 식당 등록 조회, 교환권 등록 조회 API 임포트 - 추후 삭제 예정
 // import { Button } from "react-native";
 // import { createQuest, getPlaces, registerPlace } from "./api/registerAPI";
+import { createCoupons } from "./api/registerAPI";
 
 export default function ExplainScreen() {
     const router = useRouter();
@@ -73,6 +74,25 @@ export default function ExplainScreen() {
                     }
                 }}
             /> */}
+
+            <Button title="교환권 생성" onPress={async() => {
+                const couponsToCreate = {
+                    "인후의숲 안뇽인덕 스티커 교환권": 300,
+                    "인후의숲 안뇽인덕 학과별 빅스티커 교환권": 300,
+                    "인후의숲 안뇽인덕 엽서 교환권": 300,
+                    "인후의숲 안뇽인덕 키링 교환권": 300,
+                    "인후의숲 안뇽인덕 인형 교환권": 300,
+                    "인후의숲 프리미엄 스페이스 출입증": 3000,
+                };
+                const result = await createCoupons(couponsToCreate);
+
+                if (result) {
+                    alert("교환권 생성 완료!");
+                } else {
+                    alert("교환권 생성 실패...");
+                }
+            }} 
+            />
             {/* ================================ */}
         </ImageBackground>
     )
