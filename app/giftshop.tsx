@@ -18,17 +18,20 @@ import Svg, { Text as SvgText } from "react-native-svg";
 import { usePointMinus } from "./api/pointMinus";
 // 현재 내 포인트를 가져오기 위한 myInfo API 임포트 ------------------------------
 import { getUserInfo } from "./api/myInfo";
+// 포인트 적립을 위한 point API 임포트 ----------------------------------------
+import { usePointAdd } from "./api/pointAdd";
 
 // ===== 설정값 =====
-const PICK_COST = -100;           // 일반 상자 가격
+const PICK_COST = 300;           // 일반 상자 가격
 const PREMIUM_COST = 500;       // 프리미엄 상자 가격
 
 // 임시 보상 데이터 나중에 수정할거
 const rewards = [
-  { id: "r1", label: "포인트 10", kind: "point" as const, amount: 10 },
-  { id: "r2", label: "포인트 30", kind: "point" as const, amount: 30 },
-  { id: "r3", label: "인덕이 키링 교환권", kind: "coupon" as const },
-  { id: "r4", label: "학과별 스티커", kind: "item" as const },
+  { id: "r1", label: "인후의숲 안뇽인덕 시티커 교환권", kind: "coupon" as const },
+  { id: "r2", label: "인후의숲 안뇽인덕 학과별 빅스티커 교환권", kind: "coupon" as const },
+  { id: "r3", label: "인후의숲 안뇽인덕 엽서 교환권", kind: "coupon" as const },
+  { id: "r4", label: "인후의숲 안뇽인덕 키링 교환권", kind: "coupon" as const },
+  { id: "r5", label: "인후의숲 안뇽인덕 인형 교환권", kind: "coupon" as const },
 ];
 
 const pickRandomReward = () => {
@@ -52,6 +55,29 @@ export default function GiftShopScreen() {
     fetchProfile();
   }, []);
 
+  // 치트로 포인트 적립되게 하기 ======================================================
+  const handleDevPoint = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      const result = await usePointAdd("영수증 인증 미션");
+
+      if (result && result.points_added) {
+        setPoints(prevPoints => prevPoints + result.points_added);
+
+        Alert.alert("포인트 적립 성공!", `포인트 ${result.points_added} P 적립되었어!`);
+      } else {
+        Alert.alert("포인트 적립 실패", "포인트 적립에 실패했습니다. 다시 시도해 주세요.");
+      }
+    } catch (error) {
+      console.error("포인트 적립 오류:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  // =============================================================================
+
   // 핸들러 함수 추가
   const handlePickBox = async () => {
     if (isLoading) return;
@@ -65,8 +91,8 @@ export default function GiftShopScreen() {
     try {
       const result = await usePointMinus();
 
-      if (result && result.points_dedacted) {
-        setPoints(prevPoints => prevPoints - result.points_dedacted);
+      if (result && result.points_deducted) {
+        setPoints(prevPoints => prevPoints - result.points_deducted);
 
         const reward = pickRandomReward();
         Alert.alert(
@@ -142,7 +168,7 @@ export default function GiftShopScreen() {
               선물 상점
             </SvgText>
           </Svg>
-          <Text style={styles.pointText}>내 포인트 : {points} P</Text>
+          <Text style={styles.pointText} onLongPress={handleDevPoint}>내 포인트 : {points} P</Text>
         </View>
       </View>
 
@@ -195,7 +221,7 @@ export default function GiftShopScreen() {
           >
 
             <Text style={[styles.infoText, {textAlign: "center"}]}>
-              20 포인트를 사용해 {"\n"}
+              300 포인트를 사용해 {"\n"}
               5가지의 랜덤선물을 뽑아보세요 !{"\n"}
               {"\n"}
               • 인후의숲 안뇽인덕 스티커 교환권 {"\n"}

@@ -20,6 +20,7 @@ export const usePointMinus = async () => {
             {   
                 headers: { 
                     Authorization: `Bearer ${accessToken}` ,
+                    "Content-Type": "application/json",
                 },
             timeout: 10000,
             } 

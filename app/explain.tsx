@@ -4,7 +4,8 @@ import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from
 import { customFonts } from "../constants/Fonts";
 
 // 식당 등록 조회 API 임포트 - 추후 삭제 예정
-
+// import { Button } from "react-native";
+// import { createQuest, getPlaces, registerPlace } from "./api/registerAPI";
 
 export default function ExplainScreen() {
     const router = useRouter();
@@ -44,9 +45,9 @@ export default function ExplainScreen() {
                     alert("가게 등록 실패...");
                     }
                 }}
-            />
+            /> */}
 
-            <Button
+            {/* <Button
                 title="전체 가게 조회"
                 onPress={async () => {
                     try {
