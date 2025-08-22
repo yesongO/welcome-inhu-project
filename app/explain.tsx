@@ -6,7 +6,8 @@ import { customFonts } from "../constants/Fonts";
 // 식당 등록 조회, 교환권 등록 조회 API 임포트 - 추후 삭제 예정
 // import { Button } from "react-native";
 // import { createQuest, getPlaces, registerPlace } from "./api/registerAPI";
-import { createCoupons } from "./api/registerAPI";
+// import { createCoupons } from "./api/registerAPI";
+import { acceptQuest } from "./api/acceptQ";
 
 export default function ExplainScreen() {
     const router = useRouter();
@@ -75,7 +76,7 @@ export default function ExplainScreen() {
                 }}
             /> */}
 
-            <Button title="교환권 생성" onPress={async() => {
+            {/* <Button title="교환권 생성" onPress={async() => {
                 const couponsToCreate = {
                     "인후의숲 안뇽인덕 스티커 교환권": 300,
                     "인후의숲 안뇽인덕 학과별 빅스티커 교환권": 300,
@@ -92,7 +93,17 @@ export default function ExplainScreen() {
                     alert("교환권 생성 실패...");
                 }
             }} 
-            />
+            /> */}
+
+            <Button title="퀘스트 수락" onPress={async() => {
+                const quest_id = 1; // 수락할 퀘스트 ID
+                const result = await acceptQuest(quest_id);
+                if (result) {
+                    alert("퀘스트 수락 완료!");
+                } else {
+                    alert("퀘스트 수락 실패...");
+                }
+            }} />
             {/* ================================ */}
         </ImageBackground>
     )
