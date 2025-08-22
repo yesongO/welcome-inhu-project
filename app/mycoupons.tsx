@@ -70,7 +70,7 @@ export default function MyCouponsScreen() {
                 </View>
                     <View style={styles.couponContainer}>
                         {myCoupons.length === 0 ? (
-                            <Text style={styles.pointText}>아직 획득한 쿠폰이 없어요.</Text>
+                            <Text style={styles.pointText}>아직 획득한 교환권이 없어요.</Text>
                         ) : (
                         <FlatList
                             data={myCoupons}

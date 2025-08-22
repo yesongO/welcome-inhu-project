@@ -1,13 +1,10 @@
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import { Button, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
 // 식당 등록 조회, 교환권 등록 조회 API 임포트 - 추후 삭제 예정
-// import { Button } from "react-native";
-// import { createQuest, getPlaces, registerPlace } from "./api/registerAPI";
 // import { createCoupons } from "./api/registerAPI";
-import { acceptQuest } from "./api/acceptQ";
 
 export default function ExplainScreen() {
     const router = useRouter();
@@ -41,7 +38,7 @@ export default function ExplainScreen() {
                 title="가게 등록"
                 onPress={async () => {
                     try {
-                    await registerPlace("레커훈스"); // 등록할 가게 이름
+                    await registerPlace("스톡홀름샐러드"); // 등록할 가게 이름
                     alert("가게 등록 완료!");
                     } catch (err) {
                     alert("가게 등록 실패...");
@@ -60,21 +57,21 @@ export default function ExplainScreen() {
                     alert("가게 조회 실패...");
                     }
                 }}
-            />
+            /> */}
 
-            <Button
+            {/* <Button
                 title="퀘스트 생성"
                 onPress={async () => {
                     try {
-                    await createQuest(6, 100, 
-                        "치킨 좋아하시죠! 제가 최근에 아주 바삭한 튀김옷을 연구하고 있는데 일손이 부족해서요. 바삭바삭한 튀김옷 연구, 와서 같이 해보실래요? 🍗"
+                    await createQuest(16, 100, 
+                        "양상추, 토마토, 닭가슴살… 샐러드 재료들이 서로 자기가 메인이라고 우기고 있어! 너가 와서 재료들을 골라줘야 싸움이 끝날 거 같아. 와서 최고의 조합을 만들어줄래? 🍅"
                     ); // 등록할 퀘스트 (가게id, 보상포인트, 퀘스트 설명)
                     alert("퀘스트 생성 완료!");
                     } catch (err) {
                     alert("퀘스트 생성 실패...");
                     }
                 }}
-            /> */}
+            />  */}
 
             {/* <Button title="교환권 생성" onPress={async() => {
                 const couponsToCreate = {
@@ -95,7 +92,7 @@ export default function ExplainScreen() {
             }} 
             /> */}
 
-            <Button title="퀘스트 수락" onPress={async() => {
+            {/* <Button title="퀘스트 수락" onPress={async() => {
                 const quest_id = 1; // 수락할 퀘스트 ID
                 const result = await acceptQuest(quest_id);
                 if (result) {
@@ -103,7 +100,7 @@ export default function ExplainScreen() {
                 } else {
                     alert("퀘스트 수락 실패...");
                 }
-            }} />
+            }} /> */}
             {/* ================================ */}
         </ImageBackground>
     )
