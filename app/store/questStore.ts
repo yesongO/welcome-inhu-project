@@ -9,22 +9,37 @@ export interface Quest {
 }
 
 interface QuestState {
-    quests: Quest[]; // 전체 퀘스트
     acceptedQuests: Quest[]; // 수락한 퀘스트 목록
     acceptQuest: (quest: Quest) => void;
+    removeQuest: (questId: string) => void;
+    isQuestAccepted: (questId: string) => boolean;
 }
 
-// *** 퀘스트 수락하기 함수 정의 ***
-export const useQuestStore = create<QuestState>((set) => ({
-    // 전체 퀘스트 초기값
-    quests: [],
-
+export const useQuestStore = create<QuestState>((set, get) => ({
     // 수락한 퀘스트 초기값
     acceptedQuests: [],
 
-    acceptQuest: (quest: Quest) =>
+    // 퀘스트 수락하기 (중복 방지)
+    acceptQuest: (quest: Quest) => {
+        const state = get();
+        // 이미 수락된 퀘스트인지 확인
+        if (!state.isQuestAccepted(quest.id)) {
+            set((state) => ({
+                acceptedQuests: [...state.acceptedQuests, quest],
+            }));
+        }
+    },
+
+    // 퀘스트 제거하기
+    removeQuest: (questId: string) => {
         set((state) => ({
-        quests: [...state.quests, quest], // 전체 퀘스트 목록에 추가 (추후 수정?)
-        acceptedQuests: [...state.acceptedQuests, quest], // 수락한 퀘스트 목록에 추가
-    })),
+            acceptedQuests: state.acceptedQuests.filter(quest => quest.id !== questId),
+        }));
+    },
+
+    // 퀘스트가 이미 수락되었는지 확인
+    isQuestAccepted: (questId: string) => {
+        const state = get();
+        return state.acceptedQuests.some(quest => quest.id === questId);
+    },
 }));
