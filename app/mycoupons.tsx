@@ -2,11 +2,30 @@
 // 내 쿠폰 화면
 
 import { useRouter } from "expo-router";
-import { Image, ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
+import { useCouponStore } from './store/couponStore';
 
-export default function GiftShopScreen() {
+// 각 쿠폰에 맞는 이미지를 미리 준비해두자 (경로는 예시)
+const couponImages = {
+    "인후의숲 안뇽인덕 엽서 교환권": require('../assets/images/goods_ticket.png'),
+    "인후의숲 안뇽인덕 키링 교환권": require('../assets/images/goods_ticket.png'),
+    "인후의숲 안뇽인덕 스티커 교환권": require('../assets/images/goods_ticket.png'),
+    "인후의숲 안뇽인덕 빅스티커 교환권": require('../assets/images/goods_ticket.png'),
+    "인후의숲 안뇽인덕 인형 교환권": require('../assets/images/goods_ticket.png'),
+};
+
+// const rewards = [
+//     { id: "r1", label: "인후의숲 안뇽인덕 스티커 교환권", kind: "coupon" as const },
+//     { id: "r2", label: "인후의숲 안뇽인덕 학과별 빅스티커 교환권", kind: "coupon" as const },
+//     { id: "r3", label: "인후의숲 안뇽인덕 엽서 교환권", kind: "coupon" as const },
+//     { id: "r4", label: "인후의숲 안뇽인덕 키링 교환권", kind: "coupon" as const },
+//     { id: "r5", label: "인후의숲 안뇽인덕 인형 교환권", kind: "coupon" as const },
+//   ];
+
+export default function MyCouponsScreen() {
     const router = useRouter();
+    const { myCoupons } = useCouponStore();
 
     return (
         <ImageBackground source={require("../assets/images/sky_background.png")} style={styles.background}>
@@ -47,10 +66,24 @@ export default function GiftShopScreen() {
                                 내 교환권
                             </SvgText>
                         </Svg>
-                        {/* <Text style={styles.pointText}>채운 도감 : n개</Text> */}
                     </View>
                 </View>
-
+                    <View style={styles.couponContainer}>
+                        {myCoupons.length === 0 ? (
+                            <Text style={styles.pointText}>아직 획득한 쿠폰이 없어요.</Text>
+                        ) : (
+                        <FlatList
+                            data={myCoupons}
+                            keyExtractor={(item) => item.id + Math.random()} // key는 고유해야 해
+                            renderItem={({ item }) => (
+                                <View style={styles.couponItem}>
+                                    <Image source={couponImages[item.label as keyof typeof couponImages]} style={styles.couponImage} />
+                                    <Text style={styles.labelText}>{item.label}</Text>
+                                </View>
+                            )}
+                        />
+                        )}
+                    </View>
         </ImageBackground>
     );
 }
@@ -86,6 +119,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+    couponContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -400,
+    },
     iconImage: {
         width: 120,
         height: 120,
@@ -97,6 +136,16 @@ const styles = StyleSheet.create({
         fontFamily: "cookieB",
         color: "#fff",
         textAlign: "center",
-        marginTop: -38
+        marginTop: -140
     },
+    couponItem: { flexDirection: 'row', alignItems: 'center', marginBottom: 15 },
+    couponImage: { width: 100, height: 80, marginRight: 10, resizeMode: 'contain' },
+    labelText: {
+        fontSize: 18,
+        fontFamily: "cookieB",
+        color: "#242424",
+        textAlign: "center",
+        marginTop: -0,
+        marginLeft: 10,
+    }
 });

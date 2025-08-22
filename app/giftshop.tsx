@@ -13,6 +13,7 @@ import {
   View
 } from "react-native";
 import Svg, { Text as SvgText } from "react-native-svg";
+import { useCouponStore } from "./store/couponStore";
 
 // 포인트 차감을 위한 point API 임포트 ----------------------------------------
 import { usePointMinus } from "./api/pointMinus";
@@ -28,7 +29,7 @@ const PREMIUM_COST = 500;       // 프리미엄 상자 가격
 // 임시 보상 데이터 나중에 수정할거
 const rewards = [
   { id: "r1", label: "인후의숲 안뇽인덕 스티커 교환권", kind: "coupon" as const },
-  { id: "r2", label: "인후의숲 안뇽인덕 학과별 빅스티커 교환권", kind: "coupon" as const },
+  { id: "r2", label: "인후의숲 안뇽인덕 빅스티커 교환권", kind: "coupon" as const },
   { id: "r3", label: "인후의숲 안뇽인덕 엽서 교환권", kind: "coupon" as const },
   { id: "r4", label: "인후의숲 안뇽인덕 키링 교환권", kind: "coupon" as const },
   { id: "r5", label: "인후의숲 안뇽인덕 인형 교환권", kind: "coupon" as const },
@@ -40,6 +41,8 @@ const pickRandomReward = () => {
 };
 
 export default function GiftShopScreen() {
+  const { addCoupon } = useCouponStore();
+
   const router = useRouter();
   const [points, setPoints] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -95,6 +98,11 @@ export default function GiftShopScreen() {
         setPoints(prevPoints => prevPoints - result.points_deducted);
 
         const reward = pickRandomReward();
+
+        if (reward.kind === "coupon") {
+          addCoupon(reward);
+        }
+
         Alert.alert(
           "뽑기 성공!", 
           `축하해! ${reward.label}을 획득했어!`,
@@ -225,7 +233,7 @@ export default function GiftShopScreen() {
               5가지의 랜덤선물을 뽑아보세요 !{"\n"}
               {"\n"}
               • 인후의숲 안뇽인덕 스티커 교환권 {"\n"}
-              • 인후의숲 안뇽인덕 학과별 빅스티커 교환권 {"\n"}
+              • 인후의숲 안뇽인덕 빅스티커 교환권 {"\n"}
               • 인후의숲 안뇽인덕 엽서 교환권 {"\n"}
               • 인후의숲 안뇽인덕 키링 교환권 {"\n"}
               • 인후의숲 안뇽인덕 인형 교환권 {"\n"}
