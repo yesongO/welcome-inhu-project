@@ -27,7 +27,7 @@ const PREMIUM_COST = 500;       // 프리미엄 상자 가격
 
 // 임시 보상 데이터 나중에 수정할거
 const rewards = [
-  { id: "r1", label: "인후의숲 안뇽인덕 시티커 교환권", kind: "coupon" as const },
+  { id: "r1", label: "인후의숲 안뇽인덕 스티커 교환권", kind: "coupon" as const },
   { id: "r2", label: "인후의숲 안뇽인덕 학과별 빅스티커 교환권", kind: "coupon" as const },
   { id: "r3", label: "인후의숲 안뇽인덕 엽서 교환권", kind: "coupon" as const },
   { id: "r4", label: "인후의숲 안뇽인덕 키링 교환권", kind: "coupon" as const },
