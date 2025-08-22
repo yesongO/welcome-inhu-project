@@ -2,42 +2,9 @@ import { useRouter } from "expo-router";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useQuestStore } from "../store/questStore";
 
-type Quest = {
-    id: string;
-    image: any;
-    title: string;
-    description: string;
-    reward: number;
-};
-
 export default function QuestScreen() {
     const { acceptedQuests } = useQuestStore();
     const router = useRouter();
-
-    // 퀘스트 예시 데이터 (실제로는 store에서 가져올 예정)
-    const quests: Quest[] = [
-        {
-            id: "1",
-            image: require("../../assets/images/excharacter_1.png"),
-            title: "미식당 사장님의 부탁",
-            description: "식당별로 컨셉에 맞게 퀘스트 설명창을 준비할 예정입니다.",
-            reward: 100,
-        },
-        {
-            id: "2",
-            image: require("../../assets/images/excharacter_2.png"),
-            title: "카페 사장님의 부탁",
-            description: "카페에서 특별한 음료를 만들어주세요.",
-            reward: 150,
-        },
-        {
-            id: "3",
-            image: require("../../assets/images/excharacter_3.png"),
-            title: "베이커리 사장님의 부탁",
-            description: "신선한 빵을 구워주세요.",
-            reward: 200,
-        },
-    ];
 
     const handleAuthenticate = () => {
         router.push("/camera");
@@ -54,28 +21,36 @@ export default function QuestScreen() {
                 >
                     {/* 퀘스트 정보 */}
                     <View style={styles.questSection}>
-                        {quests.map((quest, index) => (
-                            <View key={quest.id} style={styles.questItem}>
-                                <View style={styles.characterContainer}>
-                                    <Image source={quest.image} style={styles.characterImage} />
-                                </View>
-                                <View style={styles.questInfo}>
-                                    <Text style={styles.questTitle}>{quest.title}</Text>
-                                    <View style={styles.actionButtons}>
-                                        <TouchableOpacity style={styles.viewQuestBtn}>
-                                            <Text style={styles.viewQuestText}>퀘스트보기</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.authenticateBtn} onPress={handleAuthenticate}>
-                                            <Image 
-                                                source={require("../../assets/images/camera.png")} 
-                                                style={[styles.cameraIcon, { tintColor: "#FFFFFF" }]} 
-                                            />
-                                            <Text style={styles.authenticateText}>인증하기</Text>
-                                        </TouchableOpacity>
+                        {acceptedQuests.length === 0 ? (
+                            <View style={styles.emptyState}>
+                                <Text style={styles.emptyText}>아직 수락한 퀘스트가 없습니다.</Text>
+                                <Text style={styles.emptySubText}>메인 페이지에서 퀘스트를 수락해보세요!</Text>
+                            </View>
+                        ) : (
+                            acceptedQuests.map((quest, index) => (
+                                <View key={quest.id} style={styles.questItem}>
+                                    <View style={styles.characterContainer}>
+                                        <Image source={quest.image} style={styles.characterImage} />
+                                    </View>
+                                    <View style={styles.questInfo}>
+                                        <Text style={styles.questTitle}>{quest.title}</Text>
+                                        <Text style={styles.questDescription}>{quest.description}</Text>
+                                        <View style={styles.actionButtons}>
+                                            <TouchableOpacity style={styles.viewQuestBtn}>
+                                                <Text style={styles.viewQuestText}>퀘스트보기</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={styles.authenticateBtn} onPress={handleAuthenticate}>
+                                                <Image 
+                                                    source={require("../../assets/images/camera.png")} 
+                                                    style={[styles.cameraIcon, { tintColor: "#FFFFFF" }]} 
+                                                />
+                                                <Text style={styles.authenticateText}>인증하기</Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        ))}
+                            ))
+                        )}
                     </View>
                 </ImageBackground>
             </View>
@@ -107,6 +82,26 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 250, // 책 이미지 아래에 적절하게 배치
         marginLeft: 10
+    },
+    emptyState: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        marginTop: 100,
+    },
+    emptyText: {
+        fontSize: 18,
+        fontFamily: "pixel",
+        color: "#5D3838",
+        fontWeight: "bold",
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    emptySubText: {
+        fontSize: 14,
+        fontFamily: "pixel",
+        color: "#8B7355",
+        textAlign: 'center',
     },
     questItem: {
         flexDirection: "row",
@@ -141,7 +136,14 @@ const styles = StyleSheet.create({
         fontFamily: "pixel",
         color: "#5D3838",
         fontWeight: "bold",
+        marginBottom: 8,
+    },
+    questDescription: {
+        fontSize: 12,
+        fontFamily: "pixel",
+        color: "#8B7355",
         marginBottom: 12,
+        lineHeight: 16,
     },
     actionButtons: {
         flexDirection: "row",
