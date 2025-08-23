@@ -6,8 +6,12 @@ export default function QuestScreen() {
     const { acceptedQuests } = useQuestStore();
     const router = useRouter();
 
-    const handleAuthenticate = () => {
-        router.push("/camera");
+    // 수락하기 버튼을 눌렀을 경우 동작하는 함수
+    const handleAuthenticate = (questId: string) => {
+        router.push({
+            pathname: "/camera",
+            params: { questId: questId },
+        });
     };
 
     return (
@@ -39,7 +43,7 @@ export default function QuestScreen() {
                                             {/* <TouchableOpacity style={styles.viewQuestBtn}>
                                                 <Text style={styles.viewQuestText}>퀘스트보기</Text>
                                             </TouchableOpacity> */}
-                                            <TouchableOpacity style={styles.authenticateBtn} onPress={handleAuthenticate}>
+                                            <TouchableOpacity style={styles.authenticateBtn} onPress={() => handleAuthenticate(quest.id)}>
                                                 <Image 
                                                     source={require("../../assets/images/camera.png")} 
                                                     style={[styles.cameraIcon, { tintColor: "#FFFFFF" }]} 

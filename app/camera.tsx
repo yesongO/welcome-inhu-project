@@ -1,12 +1,15 @@
 import { CameraType, CameraView, FlashMode, useCameraPermissions } from 'expo-camera';
 import { useFonts } from "expo-font";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import TopBar from "../components/TopBar";
 import { customFonts } from "../constants/Fonts";
 
 const { width: screenWidth } = Dimensions.get('window');
+
+// 영수증 인증 API 함수 임포트
+import { uploadReceiptAPI } from "./api/receipt";
 
 export default function CameraScreen() {
     const router = useRouter();
@@ -15,6 +18,8 @@ export default function CameraScreen() {
     const [cameraType, setCameraType] = useState<CameraType>('back');
     const [flashMode, setFlashMode] = useState<FlashMode>('off');
     const cameraRef = useRef<any>(null);
+
+    const { questId } = useLocalSearchParams<{ questId: string }>();
 
     useEffect(() => {
         if (permission && !permission.granted) {
@@ -49,27 +54,37 @@ export default function CameraScreen() {
     }
 
     const takePicture = async () => {
-        if (cameraRef.current) {
+        // questId가 없으면 실행되지 않게
+        if (!cameraRef.current || !questId) {
+            console.log("카메라가 준비되지 않았거나 퀘스트 ID가 없습니다.");
+            return;
+        }
+
             try {
                 const photo = await cameraRef.current.takePictureAsync({
                     quality: 0.8,
-                    base64: true,
                 });
-                
-                Alert.alert('사진 촬영 완료', '영수증을 촬영했습니다!', [
-                    {
-                        text: '확인',
-                        onPress: () => {
-                            // 여기서 촬영된 사진을 처리하거나 저장할 수 있습니다!!!
-                            router.push("/complete" as any);
+
+                // 사진 촬영 성공 후, 업로드 API 호출
+                const result = await uploadReceiptAPI(questId, photo);
+
+                if (result) {
+                    Alert.alert('사진 촬영 완료', '영수증을 촬영했습니다!', [
+                        {
+                            text: '확인',
+                            onPress: () => {
+                                // 여기서 촬영된 사진을 처리하거나 저장할 수 있습니다!!!
+                                router.push("/complete" as any);
+                            },
                         },
-                    },
-                ]);
+                    ]);
+                } else {
+                    Alert.alert('오류', '영수증 업로드에 실패했습니다.');
+                }
             } catch (error) {
                 Alert.alert('오류', '사진 촬영에 실패했습니다.');
             }
-        }
-    };
+        };
 
     const toggleCameraType = () => {
         setCameraType((current: CameraType) => (
