@@ -3,7 +3,6 @@ import { useFonts } from "expo-font";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import TopBar from "../components/TopBar";
 import { customFonts } from "../constants/Fonts";
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -134,7 +133,7 @@ export default function CameraScreen() {
         <ImageBackground source={require("../assets/images/forest_background2.png")} style={styles.background}>
             <View style={styles.container}>
                 {/* 상단 바 - TopBar 컴포넌트 사용 */}
-                <TopBar points={20} />
+                {/* <TopBar points={20} /> */}
 
                 {/* 메인 카메라 영역 - 흰색 패널 */}
                 <View style={styles.cameraArea}>

@@ -43,7 +43,7 @@ export default function SelectScreen() {
             );
             // 성공하면 설명 페이지로 이동
             console.log("회원가입 성공:", res);
-            Alert.alert("가입 성공! 이제 로그인 화면으로 이동합니다.");
+            Alert.alert("가입 성공! 환영합니다!");
             router.back();
         } catch (error) {
             console.error("회원가입 오류:", error);
