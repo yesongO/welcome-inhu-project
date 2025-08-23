@@ -1,143 +1,277 @@
+// app/chat.tsx
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { FlatList, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { customFonts } from "../constants/Fonts";
 
-// 랜덤 시작 질문들
-const startQuestions = [
-    { role: "bot", text: "오늘 시원한 음식이 땡겨요? 아니면 따뜻한 음식이 땡겨요?" },
-    { role: "bot", text: "오늘 기분은 어떤가요? 새콤? 달콤?" },
-    { role: "bot", text: "점심으로 뭘 먹을까요? 국물 있는 거? 없는 거?" },
-    { role: "bot", text: "지금 배고픈 정도는 어때요? 아주 많이? 조금?" },
-    { role: "bot", text: "매운 음식 괜찮으세요? 네 or 아니오" },
-    { role: "bot", text: "오늘은 따뜻한 국물? 시원한 면?" },
-    { role: "bot", text: "식사 분위기는 조용하게? 북적하게?" },
-    { role: "bot", text: "면 요리 vs 밥 요리, 뭐가 좋아요?" },
-    { role: "bot", text: "한식, 중식, 일식 중에 어떤 게 당겨요?" },
-    { role: "bot", text: "점심 예산은 넉넉하게? 절약 모드?" },
-    { role: "bot", text: "매콤한 닭? 부드러운 닭?" },
-    { role: "bot", text: "오늘은 고기? 채소?" },
-    { role: "bot", text: "해산물 좋아하세요? 네 or 아니오" },
-    { role: "bot", text: "오늘은 혼밥? 같이?" },
-    { role: "bot", text: "매콤한 국물 vs 담백한 국물" },
-    { role: "bot", text: "뜨끈한 밥? 차가운 국수?" },
-    { role: "bot", text: "짭짤한 음식 vs 달콤한 음식" },
-    { role: "bot", text: "느끼한 음식 vs 담백한 음식" },
-    { role: "bot", text: "고기 많은 음식 vs 야채 많은 음식" }
-];
+import {
+  startSession,
+  getPresetQuestions,
+  sendUserAnswer,
+  completeSession,
+  normalizeAnswerQuests,
+  normalizeIdQuests,
+  PresetQuestion,
+} from "./api/chatbot";
+
+type Msg = { role: "bot" | "user"; text: string };
+const BOT_CONFIRM = "좋아요, 이제 숲속에서 사장님들의 부탁을 들어주세요!";
+
+// API가 비어올 때 화면용으로만 쓰는 폴백 질문(서버에는 깔끔한 문구만 전달)
+const FALLBACK_PRESETS = [
+  "오늘 시원한 음식이 땡겨요? 아니면 따뜻한 음식이 땡겨요?",
+  "한식, 중식, 일식 중에 어떤 게 당겨요?",
+  "점심으로 뭘 먹을까요? 국물 있는 거? 없는 거?",
+  "오늘 기분은 어떤가요? 새콤? 달콤?",
+  "면 요리 vs 밥 요리, 뭐가 좋아요?",
+  "매운 음식 괜찮으세요? 네 or 아니오",
+  "지금 배고픈 정도는 어때요? 아주 많이? 조금?",
+  "고기 많은 음식 vs 야채 많은 음식",
+  "오늘은 혼밥? 같이?",
+  "느끼한 음식 vs 담백한 음식",
+  "매콤한 국물 vs 담백한 국물",
+  "점심 예산은 넉넉하게? 절약 모드?",
+  "뜨끈한 밥? 차가운 국수?",
+  "짭짤한 음식 vs 달콤한 음식",
+   "식사 분위기는 조용하게? 북적하게?",
+   "매콤한 닭? 부드러운 닭?",
+   "오늘은 고기? 채소?" ,
+   
+
+
+
+
+
+] as const;
+
+const pickRandom = <T,>(arr: ReadonlyArray<T>) =>
+  arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
 
 export default function ChatScreen() {
-    const router = useRouter();
-    const [fontsLoaded] = useFonts(customFonts);
-    const [messages, setMessages] = useState([
-        startQuestions[Math.floor(Math.random() * startQuestions.length)]
-    ]);
-    const [input, setInput] = useState("");
+  const router = useRouter();
+  const [fontsLoaded] = useFonts(customFonts);
 
-    const sendMessage = () => {
-        if (!input.trim()) return;
+  const [initLoading, setInitLoading] = useState(true);   // 세션+프리셋 로딩
+  const [sendLoading, setSendLoading] = useState(false);  // 답변 전송 중
+  const [messages, setMessages] = useState<Msg[]>([]);
+  const [input, setInput] = useState("");
 
-        setMessages(prev => [...prev, { role: "user", text: input }]);
-        setInput("");
+  const sessionIdRef = useRef<number | null>(null);
+  const contextRef = useRef<string | null>(null); // 서버 프리셋 중 랜덤 1개(또는 폴백)
 
-        setTimeout(() => {
-            setMessages(prev => [
-                ...prev,
-                {role: "bot", text: "좋아요, 이제 숲속에서 사장님들의 부탁을 들어주세요!"}
-            ]);
+  // 1) 진입: 세션 생성 → 프리셋 불러오기 → 랜덤 1개 → 봇 첫 메시지
+  useEffect(() => {
+    (async () => {
+      try {
+        const sess = await startSession();
+        console.log("startSession ->", sess);
+        if (!sess?.session_id) throw new Error("세션 생성 실패");
+        sessionIdRef.current = sess.session_id;
 
-            setTimeout(() => router.push("/main"), 3000);
-        }, 1000);
-    };
+        const presets = await getPresetQuestions(); // (강화 버전)
+        console.log("presets length ->", Array.isArray(presets) ? presets.length : presets);
 
-    if (!fontsLoaded) {
-        return null;
+        const questionText =
+          (presets && presets.length > 0
+            ? (pickRandom(presets as ReadonlyArray<PresetQuestion>)?.preset_text ?? null)
+            : null) ||
+          pickRandom(FALLBACK_PRESETS) ||
+          "오늘은 어떤 음식이 당기세요?";
+
+        console.log("question source ->", (presets && presets.length > 0) ? "SERVER" : "FALLBACK");
+
+        contextRef.current = questionText;
+        setMessages([{ role: "bot", text: questionText }]);
+      } catch (e: any) {
+        console.error("초기 로드 오류:", e?.message ?? e);
+        const questionText = "오늘은 어떤 음식이 당기세요?"; // 라벨 없는 기본 문구
+        contextRef.current = questionText;
+        setMessages([{ role: "bot", text: questionText }]);
+      } finally {
+        setInitLoading(false);
+      }
+    })();
+  }, []);
+
+  // 2) 사용자 입력 → 확인 멘트 즉시 표시 → 퀘스트 요청 → 저장 후 /main
+  const sendMessage = async () => {
+    const trimmed = input.trim();
+    if (!trimmed || sendLoading || initLoading) return;
+
+    const userMsg: Msg = { role: "user", text: trimmed };
+    const botConfirm: Msg = { role: "bot", text: BOT_CONFIRM };
+
+    setMessages((prev) => [...prev, userMsg, botConfirm]);
+    setInput("");
+    setSendLoading(true);
+
+    try {
+      const session_id = sessionIdRef.current;
+      const context = contextRef.current;
+      if (!session_id || !context) throw new Error("세션/질문 누락");
+
+      const userIdStr = (await AsyncStorage.getItem("user_id")) || "0";
+      const user_id = Number(userIdStr) || 0;
+
+      // ① 답변으로 추천 3개 요청
+      const questsRaw = await sendUserAnswer({
+        session_id,
+        user_id,
+        msg_seq: 1,
+        context,         // 서버 프리셋(또는 폴백 문구)
+        prompt: trimmed, // 사용자의 답변
+      });
+
+      let quests:
+        | ReturnType<typeof normalizeAnswerQuests>
+        | ReturnType<typeof normalizeIdQuests>
+        | null = null;
+
+      if (questsRaw && questsRaw.length > 0) {
+        quests = normalizeAnswerQuests(questsRaw);
+      } else {
+        // ② 폴백: 세션 완료로 ID 목록이라도 확보
+        const ids = await completeSession(session_id);
+        if (ids && ids.length > 0) quests = normalizeIdQuests(ids);
+      }
+
+      if (!quests) throw new Error("퀘스트 응답 없음");
+
+      // 저장 완료 후 이동(레이스 컨디션 방지)
+      await AsyncStorage.multiSet([
+        ["last_quests", JSON.stringify(quests)],
+        ["last_context", context],
+        ["last_prompt", trimmed],
+        ["last_source", "chatbot"],
+        ["last_quests_ts", String(Date.now())],
+      ]);
+
+      router.push("/main");
+    } catch (e) {
+      console.error(e);
+      Alert.alert("오류", "추천 생성에 실패했어요. 다시 시도해 주세요.");
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: "죄송해요. 잠시 오류가 있었어요. 다시 입력해 볼까요?" },
+      ]);
+    } finally {
+      setSendLoading(false);
     }
+  };
 
-    return (
-        <ImageBackground source={require("../assets/images/forest_background1.png")} style={styles.background}>
-            <View style={styles.overlay}>
-                <FlatList
-                    data={messages}
-                    keyExtractor={(_, index) => index.toString()}
-                    renderItem={({ item }) => (
-                    <View style={[styles.message, item.role === "user" ? styles.user : styles.bot]}>
-                        <Text style={styles.messageText}>{item.text}</Text>
-                    </View>
-                    )}
-                />
-                <View style={styles.inputContainer}>
-                    <TextInput
-                    style={styles.input}
-                    value={input}
-                    onChangeText={setInput}
-                    placeholder="메시지를 입력하세요"
-                    />
-                    <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-                    <Text style={styles.sendText}>전송</Text>
-                    </TouchableOpacity>
+  if (!fontsLoaded) return null;
+
+  return (
+    <ImageBackground
+      source={require("../assets/images/forest_background1.png")}
+      style={styles.background}
+    >
+      <View style={styles.overlay}>
+        {initLoading ? (
+          <View style={styles.loaderWrap}>
+            <ActivityIndicator />
+            <Text style={[styles.messageText, { marginTop: 8 }]}>질문을 불러오는 중…</Text>
+          </View>
+        ) : (
+          <>
+            <FlatList
+              data={messages}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View
+                  style={[
+                    styles.message,
+                    item.role === "user" ? styles.user : styles.bot,
+                  ]}
+                >
+                  <Text style={styles.messageText}>{item.text}</Text>
                 </View>
-            </View>
-        </ImageBackground>
-    )
+              )}
+            />
+
+            <KeyboardAvoidingView
+              behavior={Platform.select({ ios: "padding", android: undefined })}
+              keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
+            >
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={input}
+                  onChangeText={setInput}
+                  placeholder="여기에 답변을 입력하세요"
+                  editable={!sendLoading}
+                />
+                <TouchableOpacity
+                  style={[styles.sendButton, sendLoading && { opacity: 0.6 }]}
+                  onPress={sendMessage}
+                  disabled={sendLoading}
+                >
+                  {sendLoading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <Text style={styles.sendText}>전송</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
+          </>
+        )}
+      </View>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
-    background: {
-        flex:1,
-        resizeMode: "cover",
-    },
-    overlay: {
-        flex: 1,
-        justifyContent: "space-between",
-        alignItems: "stretch",
-        paddingHorizontal: 30,
-        paddingVertical: 350,
-    },
-    message: { 
-        padding: 12, 
-        borderRadius: 10, 
-        marginVertical: 5, 
-        maxWidth: "100%" 
-    },
-    user: { 
-        backgroundColor: "#DCF8C6", 
-        alignSelf: "flex-end" 
-    },
-    bot: { 
-        backgroundColor: "#eee", 
-        alignSelf: "flex-start" 
-    },
-    messageText: { 
-        fontSize: 16,
-        fontFamily: "pixel",
-    },
-    inputContainer: { 
-        flexDirection: "row", 
-        alignItems: "center", 
-        paddingVertical: 5,
-        marginBottom: -50,
-    },
-    input: { 
-        flex: 1, 
-        borderWidth: 1, 
-        borderColor: "#ccc", 
-        borderRadius: 20, 
-        backgroundColor: "#fff",
-        paddingHorizontal: 14,
-        paddingVertical: 12,
-        fontFamily: "pixel",
-    },
-    sendButton: { 
-        backgroundColor: "#4CAF50", 
-        borderRadius: 30, 
-        padding: 12, 
-        marginLeft: 5 
-    },
-    sendText: { 
-        color: "#fff",
-        fontWeight: "bold",
-        fontFamily: "pixel",
-    },
+  background: { flex: 1, resizeMode: "cover" },
+  overlay: {
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "stretch",
+    paddingHorizontal: 30,
+    paddingVertical: 350,
+  },
+  loaderWrap: { flex: 1, alignItems: "center", justifyContent: "center" },
+  message: { padding: 12, borderRadius: 10, marginVertical: 5, maxWidth: "100%" },
+  user: { backgroundColor: "#DCF8C6", alignSelf: "flex-end" },
+  bot: { backgroundColor: "#eee", alignSelf: "flex-start" },
+  messageText: { fontSize: 16, fontFamily: "pixel" },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 5,
+    marginBottom: -50,
+  },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontFamily: "pixel",
+  },
+  sendButton: {
+    backgroundColor: "#4CAF50",
+    borderRadius: 30,
+    padding: 12,
+    marginLeft: 5,
+    minWidth: 70,
+    alignItems: "center",
+  },
+  sendText: { color: "#fff", fontWeight: "bold", fontFamily: "pixel" },
 });
