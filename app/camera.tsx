@@ -90,7 +90,7 @@ export default function CameraScreen() {
             } 
             // 경우 2: 서버가 알려준 '특수한 실패' (uploadReceiptAPI가 { success: false, message: ... }를 반환)
             else if (uploadResult && !uploadResult.success) {
-                console.log("🚨 서버가 영수증 인증을 실패 처리했습니다. 이유:", uploadResult.message);
+                console.log("서버가 영수증 인증을 실패 처리했습니다. 이유:", uploadResult.message);
                 // 서버가 보내준 구체적인 실패 메시지를 알림창에 그대로 보여주기!
                 Alert.alert(
                     '인증 실패', 
@@ -100,14 +100,14 @@ export default function CameraScreen() {
             }
             // 경우 3: 통신 오류 등 그 외 모든 실패 (uploadReceiptAPI가 null을 반환)
             else {
-                console.log("🚨 영수증 업로드 API 호출 자체가 실패했습니다.");
+                console.log("영수증 업로드 API 호출 자체가 실패했습니다.");
                 Alert.alert('오류', '서버와 통신 중 오류가 발생했습니다.', [
                     { text: '확인', onPress: () => router.back() }
                 ]);
             }
         } catch (error) {
             // 사진 촬영 자체에 실패하는 등 예상치 못한 에러
-            console.error("🚨 takePicture 함수 실행 중 심각한 오류 발생:", error);
+            console.error("takePicture 함수 실행 중 심각한 오류 발생:", error);
             Alert.alert('오류', '처리 중 오류가 발생했습니다. 다시 시도해주세요.', [
                 { text: '확인', onPress: () => router.back() }
             ]);

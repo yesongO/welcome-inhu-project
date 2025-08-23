@@ -5,7 +5,12 @@ import axios from "axios";
 
 const BASE_URL = "https://inhu-forest.p-e.kr";
 
-export const uploadReceiptAPI = async (questId: string, photo: { uri: string }) => {
+// ===== 1. 반환 타입을 명확하게 정의해주기 =====
+type UploadSuccess = { success: true; data: any };
+type UploadFailure = { success: false; message: string };
+export type UploadResult = UploadSuccess | UploadFailure | null;
+
+export const uploadReceiptAPI = async (questId: string, photo: { uri: string }): Promise<UploadResult> => {
     const formData = new FormData();
     formData.append('image', {
         uri: photo.uri,
@@ -28,15 +33,15 @@ export const uploadReceiptAPI = async (questId: string, photo: { uri: string }) 
         );
 
         // 진짜 성공은 200번대 코드 중에서 201이 아닐 때!
-        if (res.status >= 200 && res.status < 300 && res.status !== 201) {
+        if (res.status >= 200 && res.status < 300) {
             return { success: true, data: res.data };
         }
         
         // 201 코드는 '특수한 실패'로 처리!
-        if (res.status === 201) {
-            const message = res.data?.detail || "가게명이 다르거나, 이미 완료된 퀘스트입니다.";
-            return { success: false, message: message };
-        }
+        // if (res.status === 201) {
+        //     const message = res.data?.detail || "가게명이 다르거나, 이미 완료된 퀘스트입니다.";
+        //     return { success: false, message: message };
+        // }
         
         return null; // 그 외의 경우는 일단 실패로 간주
         

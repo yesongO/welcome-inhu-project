@@ -160,7 +160,7 @@ export default function MainScreen() {
         {
             id: "22",
             image: require("../../assets/images/character14.png"),
-            title: "고양이눈카레",
+            title: "고양이눈",
             reward: 100,
             description: "냐옹! 우리 가게 고양이가 카레를 다 먹어치워버렸지 뭐야~ 카레를 다시 만들어야 하는데 한시가 급해. 와서 카레 만드는 것을 도와줄 수 있니? 🍛",
         },
@@ -199,6 +199,18 @@ export default function MainScreen() {
                         const questsToShow = questsFromChat.map((chatQuest: { title: string }) => {
                             return allQuests.find(q => q.title === chatQuest.title);
                         }).filter((q: Quest | undefined): q is Quest => q !== undefined);
+
+                        // ================== 영수증 테스트를 위해 추가한 코드 ==================
+                        //  전체 퀘스트 목록에서 ID가 "22"인 '고양이눈' 퀘스트를 찾아.
+                        const questToFix = allQuests.find(q => q.id === "22");
+
+                        // '고양이눈' 퀘스트를 찾았고, 보여줄 퀘스트가 1개 이상 있다면...
+                        if (questToFix && questsToShow.length > 0) {
+                            console.log("--- [TEST] 퀘스트 ID 22번을 첫 번째 슬롯에 강제로 설정합니다! ---");
+                            // 목록의 첫 번째 자리에 '고양이눈' 퀘스트를 강제로 집어넣기!
+                            questsToShow[0] = questToFix;
+                        }
+                        // =============================================================
 
                         setRecommendedQuests(questsToShow);
                     } else {
