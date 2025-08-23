@@ -8,6 +8,8 @@ import { customFonts } from "../constants/Fonts";
 
 const { width: screenWidth } = Dimensions.get('window');
 
+import { useQuestStore } from "./store/questStore";
+
 // 영수증 인증 API 함수 임포트
 import { uploadReceiptAPI } from "./api/receipt";
 // 포인트 적립 API 함수 임포트
@@ -20,6 +22,7 @@ export default function CameraScreen() {
     const [cameraType, setCameraType] = useState<CameraType>('back');
     const [flashMode, setFlashMode] = useState<FlashMode>('off');
     const cameraRef = useRef<any>(null);
+    const {removeQuest} = useQuestStore();
 
     const { questId } = useLocalSearchParams<{ questId: string }>();
 
@@ -78,6 +81,7 @@ export default function CameraScreen() {
     
                 if (pointResult && pointResult.points_added) {
                     // 2단계까지 모두 성공!
+                    removeQuest(questId);
                     Alert.alert('퀘스트 완료!', `영수증 인증 성공! ${pointResult.points_added}P가 적립되었습니다!`, 
                         [{ text: '확인', onPress: () => router.push("/quest" as any) }]
                     );
