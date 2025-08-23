@@ -1,6 +1,7 @@
-import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { Alert, Animated, Button, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Alert, Animated, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import QuestModal from "../../components/QuestModal";
 import TopBar from "../../components/TopBar";
 import { Quest, useQuestStore } from "../store/questStore";
@@ -9,7 +10,7 @@ import { Quest, useQuestStore } from "../store/questStore";
 import { getUserInfo } from "../../app/api/myInfo";
 
 // quest API (랜덤으로 3개 생성) 임포트 
-import { getDailyQuests } from "../../app/api/quest";
+// import { getDailyQuests } from "../../app/api/quest";
 
 export default function MainScreen() {
     const router = useRouter();
@@ -180,59 +181,84 @@ export default function MainScreen() {
     ];
 
     // 화면에 보여줄 오늘의 랜덤 퀘스트 3개
-    const [dailyQuests, setDailyQuests] = useState<Quest[]>([]);
+    const [recommendedQuests, setRecommendedQuests] = useState<Quest[]>([]);
 
-    useEffect(() => {
-        const fetchDailyQuests = async () => {
-            const dailyQuestData = await getDailyQuests();
+    useFocusEffect(
+        useCallback(() => {
+            const loadRecommendedQuests = async () => {
+                try {
+                    const questsJson = await AsyncStorage.getItem("last_quests");
 
-            if (dailyQuestData) { // API 응답 예시 : [{ quest: 1 }, { quest: 2 }, { quest: 3 }]
-                const questsToShow = dailyQuestData.map((daily: { quest: number }) => {
-                    return allQuests.find(quest => quest.id === String(daily.quest));
-                }).filter((quest: Quest | undefined): quest is Quest => quest !== undefined);
+                    if (questsJson) {
+                        const questsFromChat = JSON.parse(questsJson);
+                        console.log("챗봇이 추천한 퀘스트:", questsFromChat);
+                    
+                        // 챗봇 응답 형식: [{ quest: "이치라멘", ... }]
+                        // 우리에게 필요한 형식: [{ title: "이치라멘", id: "18", image: ... }]
 
-                
-                // ========================================================
-                // 고양이눈 카레를 추가하기 위한 코드 추후 삭제해야 함
-                // 전체 퀘스트 '카탈로그'에서 ID가 22번인 '고양이눈카레' 퀘스트를 찾기
-                const quest22 = allQuests.find(q => q.id === "22");
+                        const questsToShow = questsFromChat.map((chatQuest: { title: string }) => {
+                            return allQuests.find(q => q.title === chatQuest.title);
+                        }).filter((q: Quest | undefined): q is Quest => q !== undefined);
 
-                // 3. 찾았고, 보여줄 퀘스트가 1개 이상 있다면...
-                if (quest22 && questsToShow.length > 0) {
-                    console.log("--- [TEST] 퀘스트 ID 22번을 첫 번째 슬롯에 강제로 설정합니다! ---");
-                    // 준비된 퀘스트 3개 중 첫 번째 자리에 고양이눈카레 퀘스트를 강제로 집어넣기
-                    questsToShow[0] = quest22;
+                        setRecommendedQuests(questsToShow);
+                    } else {
+                        console.log("챗봇이 추천한 퀘스트가 없습니다.");
+                        setRecommendedQuests([]);
+                    }
+                } catch (error) {
+                    console.error("오늘의 퀘스트 로드 실패:", error);
+                    setRecommendedQuests([]);
                 }
-                // ========================================================
-                
-                setDailyQuests(questsToShow);
-            }
-        };
-        fetchDailyQuests();
-    }, []);
+            };
 
-    // 오늘의 랜덤 퀘스트 3개 콘솔에 출력
-    const handleTestDailyQuests = async () => {
-        console.log("테스트: 오늘의 퀘스트 API 원본 데이터 확인");
+            loadRecommendedQuests();
+        }, []),
+    );
+
+    // // 오늘의 랜덤 퀘스트 3개 콘솔에 출력
+    // const handleTestDailyQuests = async () => {
+    //     console.log("테스트: 오늘의 퀘스트 API 원본 데이터 확인");
+    //             // ========================================================
+    //             // 고양이눈 카레를 추가하기 위한 코드 추후 삭제해야 함
+    //             // 전체 퀘스트 '카탈로그'에서 ID가 22번인 '고양이눈카레' 퀘스트를 찾기
+    //             const quest22 = allQuests.find(q => q.id === "22");
+
+    //             // 3. 찾았고, 보여줄 퀘스트가 1개 이상 있다면...
+    //             if (quest22 && questsToShow.length > 0) {
+    //                 console.log("--- [TEST] 퀘스트 ID 22번을 첫 번째 슬롯에 강제로 설정합니다! ---");
+    //                 // 준비된 퀘스트 3개 중 첫 번째 자리에 고양이눈카레 퀘스트를 강제로 집어넣기
+    //                 questsToShow[0] = quest22;
+    //             }
+    //             // ========================================================
+                
+    //             setDailyQuests(questsToShow);
+    //         }
+    //     };
+    //     fetchDailyQuests();
+    // }, []);
+
+    // // 오늘의 랜덤 퀘스트 3개 콘솔에 출력
+    // const handleTestDailyQuests = async () => {
+    //     console.log("테스트: 오늘의 퀘스트 API 원본 데이터 확인");
     
-        const result = await getDailyQuests(); // 서버에서 주는 원본 데이터를 받는다
+    //     const result = await getDailyQuests(); // 서버에서 주는 원본 데이터를 받는다
     
-        if (result) {
-            Alert.alert(
-                "API 호출 성공!", 
-                "콘솔(터미널) 창에서 '원본 데이터'를 확인하세요!"
-            );
-            // 여기서 result를 가공하지 말고, 받은 그대로 출력!
-            console.log("✅ 서버가 보낸 원본 응답:", JSON.stringify(result, null, 2));
-        } else {
-            Alert.alert("API 호출 실패", "콘솔(터미널) 창에서 에러를 확인하세요.");
-        }
-    };
+    //     if (result) {
+    //         Alert.alert(
+    //             "API 호출 성공!", 
+    //             "콘솔(터미널) 창에서 '원본 데이터'를 확인하세요!"
+    //         );
+    //         // 여기서 result를 가공하지 말고, 받은 그대로 출력!
+    //         console.log("✅ 서버가 보낸 원본 응답:", JSON.stringify(result, null, 2));
+    //     } else {
+    //         Alert.alert("API 호출 실패", "콘솔(터미널) 창에서 에러를 확인하세요.");
+    //     }
+    // };
 
     // 퀘스트 클릭 시 모달 여는 함수
     const openQuestModal = (index: number) => {
-        if (dailyQuests[index]) {
-            setSelectedQuest(dailyQuests[index]);
+        if (recommendedQuests[index]) {
+            setSelectedQuest(recommendedQuests[index]);
             setModalVisible(true);
         }
     }
@@ -275,7 +301,7 @@ export default function MainScreen() {
                 style={[styles.light, { opacity }]}
             />
             <Image
-                source={dailyQuests[0]?.image || require("../../assets/images/excharacter_1.png")}
+                source={recommendedQuests[0]?.image || require("../../assets/images/excharacter_1.png")}
                 style={styles.characterImage}
             />
             </TouchableOpacity>
@@ -290,7 +316,7 @@ export default function MainScreen() {
                 style={[styles.light, { opacity }]}
             />
             <Image
-                source={dailyQuests[1]?.image || require("../../assets/images/excharacter_1.png")}
+                source={recommendedQuests[1]?.image || require("../../assets/images/excharacter_1.png")}
                 style={styles.characterImage}
             />
             </TouchableOpacity>
@@ -305,7 +331,7 @@ export default function MainScreen() {
                 style={[styles.light, { opacity }]}
             />
             <Image
-                source={dailyQuests[2]?.image || require("../../assets/images/excharacter_1.png")}
+                source={recommendedQuests[2]?.image || require("../../assets/images/excharacter_1.png")}
                 style={styles.characterImage}
             />
             </TouchableOpacity>
@@ -322,9 +348,9 @@ export default function MainScreen() {
             />
         )}
 
-        <View style={{top: 110, left: 100, position: "absolute", zIndex: 1000}}>
+        {/* <View style={{top: 110, left: 100, position: "absolute", zIndex: 1000}}>
             <Button title="오늘의 퀘스트 출력" onPress={handleTestDailyQuests} />
-        </View>
+        </View> */}
         </>
     );
 }

@@ -1,31 +1,31 @@
 // app/chat.tsx
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { customFonts } from "../constants/Fonts";
 
 import {
-  startSession,
-  getPresetQuestions,
-  sendUserAnswer,
   completeSession,
+  getPresetQuestions,
   normalizeAnswerQuests,
   normalizeIdQuests,
   PresetQuestion,
+  sendUserAnswer,
+  startSession,
 } from "./api/chatbot";
 
 type Msg = { role: "bot" | "user"; text: string };
@@ -36,25 +36,17 @@ const FALLBACK_PRESETS = [
   "오늘 시원한 음식이 땡겨요? 아니면 따뜻한 음식이 땡겨요?",
   "한식, 중식, 일식 중에 어떤 게 당겨요?",
   "점심으로 뭘 먹을까요? 국물 있는 거? 없는 거?",
-  "오늘 기분은 어떤가요? 새콤? 달콤?",
   "면 요리 vs 밥 요리, 뭐가 좋아요?",
-  "매운 음식 괜찮으세요? 네 or 아니오",
+  "매운 음식 vs 안매운 음식",
   "지금 배고픈 정도는 어때요? 아주 많이? 조금?",
   "고기 많은 음식 vs 야채 많은 음식",
   "오늘은 혼밥? 같이?",
   "느끼한 음식 vs 담백한 음식",
   "매콤한 국물 vs 담백한 국물",
-  "점심 예산은 넉넉하게? 절약 모드?",
   "뜨끈한 밥? 차가운 국수?",
   "짭짤한 음식 vs 달콤한 음식",
-   "식사 분위기는 조용하게? 북적하게?",
-   "매콤한 닭? 부드러운 닭?",
-   "오늘은 고기? 채소?" ,
-   
-
-
-
-
+  "식사 분위기는 조용하게? 북적하게?",
+  "오늘은 고기? 채소?" , 
 
 ] as const;
 
