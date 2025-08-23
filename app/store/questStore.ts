@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { acceptQuestAPI } from "../api/quest";
 
 export interface Quest {
     id: string;
@@ -10,7 +11,8 @@ export interface Quest {
 
 interface QuestState {
     acceptedQuests: Quest[]; // 수락한 퀘스트 목록
-    acceptQuest: (quest: Quest) => void;
+
+    acceptQuest: (quest: Quest) => Promise<boolean>;
     removeQuest: (questId: string) => void;
     isQuestAccepted: (questId: string) => boolean;
 }
@@ -20,13 +22,20 @@ export const useQuestStore = create<QuestState>((set, get) => ({
     acceptedQuests: [],
 
     // 퀘스트 수락하기 (중복 방지)
-    acceptQuest: (quest: Quest) => {
-        const state = get();
-        // 이미 수락된 퀘스트인지 확인
-        if (!state.isQuestAccepted(quest.id)) {
-            set((state) => ({
-                acceptedQuests: [...state.acceptedQuests, quest],
-            }));
+    acceptQuest: async (quest: Quest) => {
+        try {
+            const result = await acceptQuestAPI(quest.id);
+
+            if (result) {
+                set((state) => ({
+                    acceptedQuests: [...state.acceptedQuests, quest],
+                }));
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error("퀘스트 수락 오류:", error);
+            return false;
         }
     },
 

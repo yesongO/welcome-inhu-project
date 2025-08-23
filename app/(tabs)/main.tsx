@@ -62,7 +62,7 @@ export default function MainScreen() {
     const [modalVisible, setModalVisible] = useState(false);
     // 현재 선택된 퀘스트 상태관리
     const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
-        
+
     // 전체 퀘스트 데이터 -> 상세 정보를 추후 가져오기 위해 서버 측의 DB와 동일하게 유지한다.
     const allQuests: Quest[] = [
         {
@@ -223,17 +223,21 @@ export default function MainScreen() {
     }
     
     // 퀘스트 수락 함수
-    const handleAcceptQuest = (quest: Quest) => {
+    const handleAcceptQuest = async (quest: Quest) => {
         // 이미 수락된 퀘스트인지 확인
         if (isQuestAccepted(quest.id)) {
             Alert.alert("알림", "이미 수락한 퀘스트입니다!");
             return;
         }
 
-        // 퀘스트 수락
-        acceptQuest(quest);
-        Alert.alert("퀘스트 수락!", `${quest.title} 퀘스트를 수락했습니다!`);
-        closeModal();
+        const success = await acceptQuest(quest);
+
+        if (success) {
+            Alert.alert("퀘스트 수락!", `${quest.title} 퀘스트를 수락했습니다!`);
+            closeModal();
+        } else {
+            Alert.alert("퀘스트 수락 실패", "퀘스트 수락에 실패했습니다. 다시 시도해주세요.");
+        }
     }
     
     // 모달 닫는 함수

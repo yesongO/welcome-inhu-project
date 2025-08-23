@@ -31,3 +31,32 @@ export const getDailyQuests = async () => {
         return null;
     }
 };
+
+
+// 퀘스트 수락하는 API 함수
+export const acceptQuestAPI = async (questId: string) => {
+    try {
+        const accessToken = await AsyncStorage.getItem("access_token");
+        if (!accessToken) return null;
+
+        const res = await axios.post(
+            `${BASE_URL}/quests/${questId}/`,
+            { action: "accept" },
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+
+        if (res.status === 200 && res.status < 300) {
+            return res.data;
+        }
+        return null;
+
+    } catch (err) {
+        console.error("퀘스트 수락 API 오류:", err);
+        return null;
+    }
+};

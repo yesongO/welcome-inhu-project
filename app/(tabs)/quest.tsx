@@ -36,9 +36,9 @@ export default function QuestScreen() {
                                         <Text style={styles.questTitle}>{quest.title}</Text>
                                         <Text style={styles.questDescription}>{quest.description}</Text>
                                         <View style={styles.actionButtons}>
-                                            <TouchableOpacity style={styles.viewQuestBtn}>
+                                            {/* <TouchableOpacity style={styles.viewQuestBtn}>
                                                 <Text style={styles.viewQuestText}>퀘스트보기</Text>
-                                            </TouchableOpacity>
+                                            </TouchableOpacity> */}
                                             <TouchableOpacity style={styles.authenticateBtn} onPress={handleAuthenticate}>
                                                 <Image 
                                                     source={require("../../assets/images/camera.png")} 
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
         fontFamily: "pixel",
         color: "#5D3838",
         fontWeight: "bold",
-        marginBottom: 10,
+        marginTop: -200,
+        marginBottom: 8,
         textAlign: 'center',
     },
     emptySubText: {
