@@ -43,7 +43,7 @@ export default function SelectScreen() {
             );
             // 성공하면 설명 페이지로 이동
             console.log("회원가입 성공:", res);
-            router.push("/explain");
+            router.back();
         } catch (error) {
             console.error("회원가입 오류:", error);
         }
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         width: 240,
         height: 240,
         resizeMode: "contain",
-        marginBottom: -94,
+        marginBottom: -100,
     },
     genderRow: {
         flexDirection: "row",
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: "100%",
-        height: 40,
+        height: 36,
         borderColor: "#fff",
         borderWidth: 1.2,
         borderRadius: 10,
@@ -178,19 +178,19 @@ const styles = StyleSheet.create({
     },
     idContainer: {
         width: "100%",
-        marginBottom: -74
+        marginBottom: -80
     },
     pwContainer: {
         width: "100%",
-        marginBottom: -74
+        marginBottom: -80
     },
     departmentContainer: {
         width: "100%",
-        marginBottom: -74
+        marginBottom: -80
     },
     nicknameContainer: {
         width: "100%",
-        marginBottom: -74
+        marginBottom: -80
     },
     genderContainer: {
         width: "100%",

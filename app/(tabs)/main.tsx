@@ -190,6 +190,21 @@ export default function MainScreen() {
                 const questsToShow = dailyQuestData.map((daily: { quest: number }) => {
                     return allQuests.find(quest => quest.id === String(daily.quest));
                 }).filter((quest: Quest | undefined): quest is Quest => quest !== undefined);
+
+                
+                // ========================================================
+                // 고양이눈 카레를 추가하기 위한 코드 추후 삭제해야 함
+                // 전체 퀘스트 '카탈로그'에서 ID가 22번인 '고양이눈카레' 퀘스트를 찾기
+                const quest22 = allQuests.find(q => q.id === "22");
+
+                // 3. 찾았고, 보여줄 퀘스트가 1개 이상 있다면...
+                if (quest22 && questsToShow.length > 0) {
+                    console.log("--- [TEST] 퀘스트 ID 22번을 첫 번째 슬롯에 강제로 설정합니다! ---");
+                    // 준비된 퀘스트 3개 중 첫 번째 자리에 고양이눈카레 퀘스트를 강제로 집어넣기
+                    questsToShow[0] = quest22;
+                }
+                // ========================================================
+                
                 setDailyQuests(questsToShow);
             }
         };

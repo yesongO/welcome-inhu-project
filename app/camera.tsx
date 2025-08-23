@@ -10,6 +10,8 @@ const { width: screenWidth } = Dimensions.get('window');
 
 // 영수증 인증 API 함수 임포트
 import { uploadReceiptAPI } from "./api/receipt";
+// 포인트 적립 API 함수 임포트
+import { usePointAdd } from "./api/pointAdd";
 
 export default function CameraScreen() {
     const router = useRouter();
@@ -54,37 +56,63 @@ export default function CameraScreen() {
     }
 
     const takePicture = async () => {
-        // questId가 없으면 실행되지 않게
+        // questId나 카메라가 준비되지 않았으면 함수 실행 중단
         if (!cameraRef.current || !questId) {
             console.log("카메라가 준비되지 않았거나 퀘스트 ID가 없습니다.");
             return;
         }
-
-            try {
-                const photo = await cameraRef.current.takePictureAsync({
-                    quality: 0.8,
-                });
-
-                // 사진 촬영 성공 후, 업로드 API 호출
-                const result = await uploadReceiptAPI(questId, photo);
-
-                if (result) {
-                    Alert.alert('사진 촬영 완료', '영수증을 촬영했습니다!', [
-                        {
-                            text: '확인',
-                            onPress: () => {
-                                // 여기서 촬영된 사진을 처리하거나 저장할 수 있습니다!!!
-                                router.push("/complete" as any);
-                            },
-                        },
-                    ]);
+    
+        try {
+            // 1. 사진 촬영
+            const photo = await cameraRef.current.takePictureAsync({ quality: 0.8 });
+            
+            // 2. 서버에 영수증 업로드 시도 (1단계 인증)
+            const uploadResult = await uploadReceiptAPI(questId, photo);
+    
+            // 경우 1: 진짜 성공! (uploadReceiptAPI가 { success: true, ... }를 반환)
+            if (uploadResult && uploadResult.success) {
+                console.log("✅ 1단계 인증 성공! 포인트 적립을 시작합니다.");
+                
+                // 2단계: 포인트 적립 시도
+                const pointResult = await usePointAdd(parseInt(questId));
+    
+                if (pointResult && pointResult.points_added) {
+                    // 2단계까지 모두 성공!
+                    Alert.alert('퀘스트 완료!', `영수증 인증 성공! ${pointResult.points_added}P가 적립되었습니다!`, 
+                        [{ text: '확인', onPress: () => router.push("/quest" as any) }]
+                    );
                 } else {
-                    Alert.alert('오류', '영수증 업로드에 실패했습니다.');
+                    // 1단계는 성공했지만 2단계(포인트 적립)에서 실패
+                    Alert.alert('오류', '영수증 인증은 성공했지만 포인트 적립에 실패했습니다.', [
+                        { text: '확인', onPress: () => router.back() }
+                    ]);
                 }
-            } catch (error) {
-                Alert.alert('오류', '사진 촬영에 실패했습니다.');
+            } 
+            // 경우 2: 서버가 알려준 '특수한 실패' (uploadReceiptAPI가 { success: false, message: ... }를 반환)
+            else if (uploadResult && !uploadResult.success) {
+                console.log("🚨 서버가 영수증 인증을 실패 처리했습니다. 이유:", uploadResult.message);
+                // 서버가 보내준 구체적인 실패 메시지를 알림창에 그대로 보여주기!
+                Alert.alert(
+                    '인증 실패', 
+                    uploadResult.message, 
+                    [{ text: '확인', onPress: () => router.back() }]
+                );
             }
-        };
+            // 경우 3: 통신 오류 등 그 외 모든 실패 (uploadReceiptAPI가 null을 반환)
+            else {
+                console.log("🚨 영수증 업로드 API 호출 자체가 실패했습니다.");
+                Alert.alert('오류', '서버와 통신 중 오류가 발생했습니다.', [
+                    { text: '확인', onPress: () => router.back() }
+                ]);
+            }
+        } catch (error) {
+            // 사진 촬영 자체에 실패하는 등 예상치 못한 에러
+            console.error("🚨 takePicture 함수 실행 중 심각한 오류 발생:", error);
+            Alert.alert('오류', '처리 중 오류가 발생했습니다. 다시 시도해주세요.', [
+                { text: '확인', onPress: () => router.back() }
+            ]);
+        }
+    };
 
     const toggleCameraType = () => {
         setCameraType((current: CameraType) => (
