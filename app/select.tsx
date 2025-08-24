@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import PickerModal from "../components/PickerModal";
 import { customFonts } from "../constants/Fonts";
 
 // 선택 가능한 학과 목록
@@ -22,7 +23,6 @@ const departments = [
     "공간정보공학과",
     "수학과",
     "통계학과",
-    "물리학과",
     "화학과",
     "해양과학과",
     "식품영양학과",
@@ -110,8 +110,8 @@ export default function SelectScreen() {
                 {/* 학과 */}
                 <View style={styles.departmentContainer}>
                     <Image source={require("../assets/images/dp_title.png")} style={[styles.titleImage, { width: "50%" }]} />
-                    <TouchableOpacity style={styles.input} onPress={() => setIsPickerVisible(true)}>
-                        <Text style={styles.input}>{department}</Text>
+                    <TouchableOpacity onPress={() => setIsPickerVisible(true)}>
+                        <Text style={[styles.input, !department && { color: "#EAEAEA" }]}>{department || "학과를 선택하세요"}</Text>
                     </TouchableOpacity>
                     {/* <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} /> */}
                 </View>
@@ -161,6 +161,12 @@ export default function SelectScreen() {
                     <Text style={styles.signupText}>가입하기</Text>
                 </TouchableOpacity>
             </View>
+            <PickerModal
+                visible={isPickerVisible}
+                onClose={() => setIsPickerVisible(false)}
+                onSelect={handleDepartmentSelect}
+                data={departments}
+            />
         </ImageBackground>
     );
 }

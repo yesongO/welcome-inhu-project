@@ -35,7 +35,7 @@ const BOT_CONFIRM = "좋아요, 이제 숲속에서 사장님들의 부탁을 �
 const FALLBACK_PRESETS = [
   "오늘 시원한 음식이 땡겨요? 아니면 따뜻한 음식이 땡겨요?",
   "한식, 중식, 일식 중에 어떤 게 당겨요?",
-  "점심으로 뭘 먹을까요? 국물 있는 거? 없는 거?",
+  "뭘 먹을까요? 국물 있는 거? 없는 거?",
   "면 요리 vs 밥 요리, 뭐가 좋아요?",
   "매운 음식 vs 안매운 음식",
   "지금 배고픈 정도는 어때요? 아주 많이? 조금?",
@@ -43,7 +43,7 @@ const FALLBACK_PRESETS = [
   "오늘은 혼밥? 같이?",
   "느끼한 음식 vs 담백한 음식",
   "매콤한 국물 vs 담백한 국물",
-  "뜨끈한 밥? 차가운 국수?",
+  "오늘 먹고싶은 건.. 밥? 면?",
   "짭짤한 음식 vs 달콤한 음식",
   "식사 분위기는 조용하게? 북적하게?",
   "오늘은 고기? 채소?" , 
@@ -181,6 +181,7 @@ export default function ChatScreen() {
         ) : (
           <>
             <FlatList
+              style = {{ flex: 1 }}
               data={messages}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
@@ -228,24 +229,47 @@ export default function ChatScreen() {
 }
 
 const styles = StyleSheet.create({
-  background: { flex: 1, resizeMode: "cover" },
+  background: { flex: 1 },
+  // 1. overlay를 훨씬 더 간단하게!
   overlay: {
     flex: 1,
-    justifyContent: "space-between",
-    alignItems: "stretch",
-    paddingHorizontal: 30,
-    paddingVertical: 350,
+    // SafeAreaView를 사용하거나, 플랫폼에 맞게 패딩을 조절하는 게 좋아.
+    // 여기서는 화면 상단과 하단에 적절한 여백을 줄게.
+    paddingTop: Platform.OS === 'ios' ? 90 : 50,
+    paddingBottom: 20,
+    paddingHorizontal: 22,
   },
-  loaderWrap: { flex: 1, alignItems: "center", justifyContent: "center" },
-  message: { padding: 12, borderRadius: 10, marginVertical: 5, maxWidth: "100%" },
-  user: { backgroundColor: "#DCF8C6", alignSelf: "flex-end" },
-  bot: { backgroundColor: "#eee", alignSelf: "flex-start" },
-  messageText: { fontSize: 16, fontFamily: "pixel" },
+  loaderWrap: { 
+    flex: 1, 
+    alignItems: "center", 
+    justifyContent: "center",
+  },
+  message: { 
+    padding: 12, // 패딩 살짝 키우기
+    borderRadius: 15, // 좀 더 둥글게
+    marginVertical: 5, 
+    maxWidth: "80%", // 메시지 최대 너비 지정
+  },
+  user: { 
+    backgroundColor: "#DCF8C6", 
+    alignSelf: "flex-end" 
+  },
+  bot: { 
+    backgroundColor: "#fff", // 흰색 배경
+    alignSelf: "flex-start" 
+  },
+  messageText: { 
+    fontSize: 16, 
+    fontFamily: "pixel",
+  },
+  // 2. inputContainer에서 복잡한 위치 값들 제거!
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 5,
-    marginBottom: -50,
+    paddingTop: 10, // 위쪽 여백
+    borderTopWidth: 1, // 경계선
+    borderTopColor: '#eee',
+    backgroundColor: 'transparent', // 배경색 투명하게
   },
   input: {
     flex: 1,
@@ -261,9 +285,57 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
     borderRadius: 30,
     padding: 12,
-    marginLeft: 5,
+    marginLeft: 10, // 간격 살짝
     minWidth: 70,
     alignItems: "center",
   },
-  sendText: { color: "#fff", fontWeight: "bold", fontFamily: "pixel" },
+  sendText: { 
+    color: "#fff", 
+    fontWeight: "bold", 
+    fontFamily: "pixel" 
+  },
 });
+
+// const styles = StyleSheet.create({
+//   background: { flex: 1, resizeMode: "cover" },
+//   overlay: {
+//     flex: 1,
+//     justifyContent: "space-between",
+//     alignItems: "stretch",
+//     paddingHorizontal: 22,
+//     paddingVertical: 350,
+//     top: -100,
+//   },
+//   loaderWrap: { flex: 1, alignItems: "center", justifyContent: "center", height: "100%", marginTop: -100},
+//   message: { padding: 10, borderRadius: 10, marginVertical: -10, maxWidth: "100%", marginTop: 0, marginBottom: 10 },
+//   user: { backgroundColor: "#DCF8C6", alignSelf: "flex-end" },
+//   bot: { backgroundColor: "#eee", alignSelf: "flex-start" },
+//   messageText: { fontSize: 16, fontFamily: "pixel",},
+//   inputContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     paddingVertical: 5,
+//     marginBottom: -40,
+//     marginTop: -60,
+//     top: 80,
+//   },
+//   input: {
+//     flex: 1,
+//     borderWidth: 1,
+//     borderColor: "#ccc",
+//     borderRadius: 20,
+//     backgroundColor: "#fff",
+//     paddingHorizontal: 14,
+//     paddingVertical: 12,
+//     fontFamily: "pixel",
+//   },
+//   sendButton: {
+//     backgroundColor: "#4CAF50",
+//     borderRadius: 30,
+//     padding: 12,
+//     marginLeft: 5,
+//     minWidth: 70,
+//     alignItems: "center",
+//   },
+//   sendText: { color: "#fff", fontWeight: "bold", fontFamily: "pixel" },
+// });
