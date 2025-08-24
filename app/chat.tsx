@@ -207,6 +207,7 @@ export default function ChatScreen() {
                   value={input}
                   onChangeText={setInput}
                   placeholder="여기에 답변을 입력하세요"
+                  placeholderTextColor="#999"
                   editable={!sendLoading}
                 />
                 <TouchableOpacity
