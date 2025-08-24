@@ -7,6 +7,36 @@ import { useState } from "react";
 import { Alert, Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { customFonts } from "../constants/Fonts";
 
+// 선택 가능한 학과 목록
+const departments = [
+    "기계공학과",
+    "항공우주공학과",
+    "조선해양공학과",
+    "산업경영공학과",
+    "화학공학과",
+    "고분자공학과",
+    "신소재공학과",
+    "사회인프라공학과",
+    "환경공학과",
+    "물리학과",
+    "공간정보공학과",
+    "수학과",
+    "통계학과",
+    "물리학과",
+    "화학과",
+    "해양과학과",
+    "식품영양학과",
+    "경영학부",
+    "아태물류학부",
+    "국제통상학과",
+    "간호학과",
+    "인공지능공학과",
+    "데이터사이언스학과",
+    "스마트모빌리티공학과",
+    "디자인테크놀로지학과",
+    "컴퓨터공학과",
+];
+
 // signup API 임포트
 import { signup } from "../app/api/auth";
 
@@ -19,6 +49,7 @@ export default function SelectScreen() {
     const [gender, setGender] = useState<string | null>(null);
     const [department, setDepartment] = useState<string>("");
     const [nickname, setNickname] = useState<string>("");
+    const [isPickerVisible, setIsPickerVisible] = useState(false);
 
     if (!fontsLoaded) {
         return null;
@@ -50,10 +81,19 @@ export default function SelectScreen() {
         }
     };
 
+    // 모달에서 학과를 선택했을 때 실행되는 함수
+    const handleDepartmentSelect = (selectedDepartment: string) => {
+        setDepartment(selectedDepartment);
+        setIsPickerVisible(false);
+    }
+
 
     return (
         <ImageBackground source={require("../assets/images/forest_background1.png")} style={styles.background}>
             <View style={styles.overlay}>
+                <TouchableOpacity style={styles.backButton} onPress={() => router.back()} accessibilityLabel="뒤로가기" accessibilityRole="button">
+                    <Text style={styles.backButtonText}>뒤로가기</Text>
+                </TouchableOpacity>
 
                 {/* 학번 */}
                 <View style={styles.idContainer}>
@@ -70,7 +110,10 @@ export default function SelectScreen() {
                 {/* 학과 */}
                 <View style={styles.departmentContainer}>
                     <Image source={require("../assets/images/dp_title.png")} style={[styles.titleImage, { width: "50%" }]} />
-                    <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} />
+                    <TouchableOpacity style={styles.input} onPress={() => setIsPickerVisible(true)}>
+                        <Text style={styles.input}>{department}</Text>
+                    </TouchableOpacity>
+                    {/* <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} /> */}
                 </View>
 
                 {/* 닉네임 */}
@@ -139,7 +182,8 @@ const styles = StyleSheet.create({
         width: 240,
         height: 240,
         resizeMode: "contain",
-        marginBottom: -100,
+        top: 1.6,
+        marginBottom: -102,
     },
     genderRow: {
         flexDirection: "row",
@@ -179,23 +223,23 @@ const styles = StyleSheet.create({
     },
     idContainer: {
         width: "100%",
-        marginBottom: -80
+        marginBottom: -90
     },
     pwContainer: {
         width: "100%",
-        marginBottom: -80
+        marginBottom: -90
     },
     departmentContainer: {
         width: "100%",
-        marginBottom: -80
+        marginBottom: -90
     },
     nicknameContainer: {
         width: "100%",
-        marginBottom: -80
+        marginBottom: -90
     },
     genderContainer: {
         width: "100%",
-        marginBottom: -60,
+        marginBottom: -80,
         marginTop: 10,
     },
     signupButton: {
@@ -211,6 +255,17 @@ const styles = StyleSheet.create({
     signupText: {
         fontFamily: "supermagic",
         fontSize: 26,
+        color: "#fff",
+    },
+    backButton: {
+        position: "absolute",
+        top: 150,
+        left: 10,
+        zIndex: 100,
+    },
+    backButtonText: {
+        fontFamily: "pixel",
+        fontSize: 20,
         color: "#fff",
     },
 });
