@@ -1,5 +1,3 @@
-
-
 import { Stack, useRouter, useSegments } from "expo-router";
 import { Dimensions, Image, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -37,7 +35,7 @@ export default function Layout() {
 
         <TouchableOpacity onPress={() => router.push("/notification")}>
           <Image source={require("../../assets/images/bell.png")} 
-          style={[styles.icon, current === "/bell" && styles.active]}
+          style={[styles.icon, current === "/notification" && styles.active]}
         />
         </TouchableOpacity>
 
