@@ -57,25 +57,25 @@ export default function SelectScreen() {
 
                 {/* 학번 */}
                 <View style={styles.idContainer}>
-                    <Image source={require("../assets/images/id_title.png")} style={[styles.titleImage, { width: "54%" }]} />
+                    <Image source={require("../assets/images/id_title.png")} style={[styles.titleImage, { width: "52%" }]} />
                     <TextInput style={styles.input} placeholder="학번" placeholderTextColor="#EAEAEA" value={studentId} onChangeText={setStudentId} />
                 </View>
 
                 {/* 비번 */}
                 <View style={styles.pwContainer}>
-                    <Image source={require("../assets/images/pw_title.png")} style={styles.titleImage} />
+                    <Image source={require("../assets/images/pw_title.png")} style={[styles.titleImage, { width: "62%" }]} />
                     <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#EAEAEA" value={password} onChangeText={setPassword} />
                 </View>
 
                 {/* 학과 */}
                 <View style={styles.departmentContainer}>
-                    <Image source={require("../assets/images/dp_title.png")} style={[styles.titleImage, { width: "52%" }]} />
+                    <Image source={require("../assets/images/dp_title.png")} style={[styles.titleImage, { width: "50%" }]} />
                     <TextInput style={styles.input} placeholder="학과" placeholderTextColor="#EAEAEA" value={department} onChangeText={setDepartment} />
                 </View>
 
                 {/* 닉네임 */}
                 <View style={styles.nicknameContainer}>
-                    <Image source={require("../assets/images/nick_title.png")} style={styles.titleImage} />
+                    <Image source={require("../assets/images/nick_title.png")} style={[styles.titleImage, { width: "56%" }]} />
                     <TextInput style={styles.input} placeholder="닉네임" placeholderTextColor="#EAEAEA" value={nickname} onChangeText={setNickname} />
                 </View>
 

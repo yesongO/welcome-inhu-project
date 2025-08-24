@@ -201,15 +201,15 @@ export default function MainScreen() {
                         }).filter((q: Quest | undefined): q is Quest => q !== undefined);
 
                         // ================== 영수증 테스트를 위해 추가한 코드 ==================
-                        //  전체 퀘스트 목록에서 ID가 "22"인 '고양이눈' 퀘스트를 찾아.
-                        const questToFix = allQuests.find(q => q.id === "22");
+                        //  전체 퀘스트 목록에서 ID가 "22"인 '고양이눈' 퀘스트를 찾기
+                        // const questToFix = allQuests.find(q => q.id === "22");
 
-                        // '고양이눈' 퀘스트를 찾았고, 보여줄 퀘스트가 1개 이상 있다면...
-                        if (questToFix && questsToShow.length > 0) {
-                            console.log("--- [TEST] 퀘스트 ID 22번을 첫 번째 슬롯에 강제로 설정합니다! ---");
-                            // 목록의 첫 번째 자리에 '고양이눈' 퀘스트를 강제로 집어넣기!
-                            questsToShow[0] = questToFix;
-                        }
+                        // // '고양이눈' 퀘스트를 찾았고, 보여줄 퀘스트가 1개 이상 있다면...
+                        // if (questToFix && questsToShow.length > 0) {
+                        //     console.log("--- [TEST] 퀘스트 ID 22번을 첫 번째 슬롯에 강제로 설정합니다! ---");
+                        //     // 목록의 첫 번째 자리에 '고양이눈' 퀘스트를 강제로 집어넣기!
+                        //     questsToShow[0] = questToFix;
+                        // }
                         // =============================================================
 
                         setRecommendedQuests(questsToShow);
@@ -305,7 +305,7 @@ export default function MainScreen() {
 
             {/* 왼쪽 상단 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { top: "26%", left: "10%" }]}
+            style={[styles.character, { top: "25.5%", left: "10%" }]}
             onPress={() => openQuestModal(0)}
             >
             <Animated.Image 
@@ -320,7 +320,7 @@ export default function MainScreen() {
 
             {/* 오른쪽 중간 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { top: "41.2%", left: "55%" }]}
+            style={[styles.character, { top: "39.5%", left: "55%" }]}
             onPress={() => openQuestModal(1)}
             >
             <Animated.Image 
@@ -335,7 +335,7 @@ export default function MainScreen() {
 
             {/* 왼쪽 하단 캐릭터 */}
             <TouchableOpacity
-            style={[styles.character, { bottom: "22%", left: "0%" }]}
+            style={[styles.character, { bottom: "20.5%", left: "0%" }]}
             onPress={() => openQuestModal(2)}
             >
             <Animated.Image 

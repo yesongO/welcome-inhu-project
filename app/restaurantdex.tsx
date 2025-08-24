@@ -37,7 +37,7 @@ export default function GiftShopScreen() {
 
   // 임시데이터(테스트용) — 나중에 API 연결 후 수정
   const items: Item[] = [
-    { name: "미식당" },
+    {},
     {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
   ];
 

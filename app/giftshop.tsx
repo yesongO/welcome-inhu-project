@@ -184,7 +184,7 @@ export default function GiftShopScreen() {
       <View style={styles.content}>
         {/* 상자 그리드 */}
         <View style={styles.dashedBox}>
-          <View style={[styles.gridRow, { marginBottom: 12 }]}>
+          <View style={[styles.gridRow, { marginBottom: -10 }]}>
             {topRow.map((item) => (
               <TouchableOpacity
                 key={item.id}
@@ -294,19 +294,17 @@ const styles = StyleSheet.create({
   content: { position: "absolute", left: 16, right: 16, top: "22%", bottom: 24 },
   dashedBox: {
     top: 10,
-    borderWidth: 10,
-    borderStyle: "solid",
     borderColor: "#7C4E4E",
     borderRadius: 16,
     paddingVertical: 12,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     backgroundColor: "#D2EBF7",
   },
   gridRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: -2,
-    marginBottom: 9,
+    gap: 0,
+    marginBottom: 18,
     marginTop: -6,
     padding: 8,
   },
@@ -320,9 +318,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 40,
   },
-  premiumRow: { marginTop: 14, flexDirection: "row", alignItems: "center", padding: 12 },
+  premiumRow: { marginTop: -16, flexDirection: "row", alignItems: "center", padding: 12 },
   premiumImage: { width: 130, height: 130, resizeMode: "contain", marginRight: 8 },
-  premiumTitle: { fontSize: 20, fontFamily: "cookieB", color: "#3A2A0A" },
+  premiumTitle: { fontSize: 16, fontFamily: "cookieB", color: "#3A2A0A" },
   premiumPrice: { marginTop: 4, fontSize: 14, color: "#3A2A0A" },
   boardImage: { borderRadius: 12, marginLeft: -2 },
 });

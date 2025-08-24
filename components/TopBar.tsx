@@ -57,8 +57,24 @@ export default function TopBar({ points = 0, onGuidePress }: TopBarProps) {
             >
                 <View style={styles.modalOverlay}>
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>설명서</Text>
-                        <Text>여기에 설명 내용을 넣어주세요.</Text>
+                        <Text style={styles.modalTitle}>안녕하세요! 😉</Text>
+                        <Text>놀러와요 인후의 숲은 방학 기간 침체된</Text>
+                        <Text>인하대학교 후문 상권을 살리기 위해 제작된</Text>
+                        <Text>게임형 어플입니다.</Text>
+                        <Text />
+                        <Text>✔️하루에 한 번, 3개의 퀘스트가 주어집니다.</Text>
+                        <Text>✔️퀘스트는 다음 날이면 리셋됩니다.</Text>
+                        <Text>✔️하루 딱 한번, 퀘스트를 리셋할 수 있어요.</Text>
+                        <Text>✔️퀘스트를 수락하고, 식당을 방문해주세요.</Text>
+                        <Text>✔️영수증 인증을 하면 포인트를 획득합니다.</Text>
+                        <Text />
+                        <Text>모은 포인트로 굿즈 교환은 물론,</Text>
+                        <Text>꾸준히 모으면 학기 중에 사용할 수 있는</Text>
+                        <Text>프리미엄 공간 이용권도 얻을 수 있답니다!</Text>
+                        <Text />
+                        <Text>퀘스트를 수행하며 인후 상권도 살리는</Text>
+                        <Text>특별한 경험을 해보세요!</Text>
+
                         <TouchableOpacity onPress={closeGuideModal} style={styles.modalCloseBtn}>
                             <Text style={{ fontWeight: "bold" }}>닫기</Text>
                         </TouchableOpacity>
