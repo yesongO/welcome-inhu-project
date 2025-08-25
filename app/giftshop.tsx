@@ -24,7 +24,7 @@ import { usePointAdd } from "./api/pointAdd";
 
 // ===== 설정값 =====
 const PICK_COST = 300;           // 일반 상자 가격
-const PREMIUM_COST = 500;       // 프리미엄 상자 가격
+const PREMIUM_COST = 3000;       // 프리미엄 상자 가격
 
 // 임시 보상 데이터 나중에 수정할거
 const rewards = [
