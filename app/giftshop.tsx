@@ -85,7 +85,7 @@ export default function GiftShopScreen() {
   const handlePickBox = async () => {
     if (isLoading) return;
     if (points < PICK_COST) {
-      Alert.alert("포인트 부족", "포인트가 부족합니다. 충전 후 이용해 주세요.");
+      Alert.alert("포인트 부족", "내 포인트가 부족합니다!");
       return;
     }
 
@@ -132,6 +132,13 @@ export default function GiftShopScreen() {
   const regularItems = items.filter(i => !i.premium).slice(0, 6);
   const topRow = regularItems.slice(0, 2);     // 2개
   const bottomRow = regularItems.slice(2, 5);  // 3개
+
+  const handlePremiumBox = () => {
+    if (points < PREMIUM_COST) {
+      Alert.alert("포인트 부족", "내 포인트가 부족합니다!");
+      return;
+    }
+  }
 
   return (
     <ImageBackground
@@ -242,7 +249,7 @@ export default function GiftShopScreen() {
         </View>
 
         {/* 프리미엄 상품 */}
-        <TouchableOpacity style={styles.premiumRow}>
+        <TouchableOpacity style={styles.premiumRow} onPress={handlePremiumBox}>
           <Image
             source={require("../assets/images/special_gift_1.png")}
             style={styles.premiumImage}

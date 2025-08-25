@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     labelText: {
         fontSize: 18,
         fontFamily: "cookieB",
-        color: "#242424",
+        color: "#CF796C",
         textAlign: "center",
         marginTop: -0,
         marginLeft: 10,

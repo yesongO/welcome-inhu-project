@@ -82,7 +82,7 @@ export default function GiftShopScreen() {
               식당 도감
             </SvgText>
           </Svg>
-          <Text style={styles.pointText}>채운 도감 : n개</Text>
+          <Text style={styles.pointText}>채운 도감 : 0개</Text>
         </View>
       </View>
 

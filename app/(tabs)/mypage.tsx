@@ -32,6 +32,10 @@ export default function MyPageScreen() {
     if (!myProfile) {
         return <Text>Loading...</Text>;
     }
+
+    const profileImageSource = myProfile.gender === "male" 
+    ? require("../../assets/images/man.png") 
+    : require("../../assets/images/woman.png");
 //------------------------------------------------------
     return (
         <ImageBackground source={require("../../assets/images/sky_background.png")} style={styles.background}>
@@ -41,7 +45,7 @@ export default function MyPageScreen() {
             <View style={styles.profileContainer}>
                 <View style={styles.profileBgContainer}>
                     <Image source={require("../../assets/images/profile_circle.png")} style={styles.profileBg} />
-                    <Image source={require("../../assets/images/woman.png")} style={styles.profileImage} />
+                    <Image source={profileImageSource} style={styles.profileImage} />
                 </View>
 
                 <View style={styles.profileText}>
