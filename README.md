@@ -11,8 +11,9 @@
   
 ## 🖥️ 프로젝트 스크린샷
 <img width="553" height="829" alt="스크린샷 2025-10-01 오전 7 50 58" src="https://github.com/user-attachments/assets/56d14a88-2428-401c-b31f-2c66d34d0063" />
-<br>
 
+<br>
+<br>
 ## 👫 팀원 소개
 
 **예송**😼(me) : PM, Design, Frontend<br>
@@ -25,6 +26,7 @@
 
 <br>
 ## ⚙️ Tech
+
 **Design** : Figma<br>
 **Frontend** : React Native<br>
 **Backend** : Django<br>
