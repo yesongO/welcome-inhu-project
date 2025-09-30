@@ -14,6 +14,7 @@
 
 <br>
 <br>
+
 ## 👫 팀원 소개
 
 **예송**😼(me) : PM, Design, Frontend<br>
@@ -25,6 +26,7 @@
 
 
 <br>
+
 ## ⚙️ Tech
 
 **Design** : Figma<br>
