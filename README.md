@@ -1,50 +1,31 @@
-# Welcome to your Expo app 👋
+# 🌳 Project Name : **놀러와요 인후의 숲**
+<br>
+놀러와요 인후의 숲은 방학 기간 인하대학교 후문 식당들의 상권을 살리기 위한 프로젝트입니다.<br>
+방학 기간 인하대학교 근처에 거주하거나 매력적인 보상을 얻고 싶은 학생들을<br>
+주 타겟으로 잡은 게이미피케이션(Gamification)입니다.<br>
+<br>
+유저는 하루마다 AI 기반 챗봇을 활용해 현재 음식 선호나 기호에 맞는<br>
+3곳의 식당을 일일 퀘스트로 받을 수 있으며, 영수증 인증을 통해 퀘스트를 수행하고<br>
+퀘스트 수행을 통해 얻은 포인트로 매력적인 보상을 뽑을 수 있습니다.<br>
+<br>
+  
+## 🖥️ 프로젝트 스크린샷
+<img width="553" height="829" alt="스크린샷 2025-10-01 오전 7 50 58" src="https://github.com/user-attachments/assets/56d14a88-2428-401c-b31f-2c66d34d0063" />
+<br>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 👫 팀원 소개
 
-## Get started
+**예송**😼(me) : PM, Design, Frontend<br>
+**다솜**🐰 : Frontend<br>
+**유림**🐹 : Frontend<br>
+**민정**🐶: Backend<br>
+**채영**🐼: Backend<br>
+**대권**🐮: Backend<br>
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+<br>
+## ⚙️ Tech
+**Design** : Figma<br>
+**Frontend** : React Native<br>
+**Backend** : Django<br>
+**AI api** : OpenAI, Clova
